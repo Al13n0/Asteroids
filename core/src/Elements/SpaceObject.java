@@ -19,6 +19,7 @@ public class SpaceObject {
         }
     }
     
+/*FUNZIONE PER ELIMINARE OGGETTI*/
     public void delete(){
         Game.get().delete(this);
     }

@@ -1,10 +1,9 @@
 package Elements;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
-import static com.badlogic.gdx.utils.TimeUtils.millis;
+import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import static java.lang.Math.cos;
@@ -12,22 +11,15 @@ import static java.lang.Math.sin;
 
 public class Bullet extends SpaceObject implements Renderable, Loopable {
 
-    private float lifetime;
-    private float dirx;
-    private float rad;
-    private float dx;
-    private float dy;
-    private float speed;
-    private float x;
-    private float y;
-    private Asteroid asteroide;
 
+    private float rad;           //angolo generato punta astronave (uso per direzione sparare)
+    private float speed;
     public Bullet(float x, float y, float rad) {
         super(x, y);
         this.x = x;
         this.y = y;
         this.rad = rad;
-        speed = (float) 3.8;
+        speed = (float) 3.9;
     }
 
     /*MOVIMENTO BULLET*/
@@ -39,18 +31,28 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
 
     /*CONTROLLO USCITA SCHERMO*/
     public boolean overscreen() {
-        return x > Gdx.graphics.getWidth() || x < 0 || y > Gdx.graphics.getHeight() || y < 0;
+        return x > Game.get().getWidth() || x < 0 || y > Game.get().getHeight() || y < 0;
     }
-
-
+    
+    /*DISTRUZIONE ASTEROIDE*/
+    public void destroy(){
+         for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
+            if(a.collision(x, y))
+            {
+                delete();  /*!!! DA FIXARE (per gli altri oggetti va)*/
+            }
+        }
+    }
+    
     /*LOGICA DEL PROGRAMMA*/
     @Override
     public void loop() {
         move();
         if (overscreen()) { //se proiettile esce da schermo lo elimino
-            delete();        //funzione di spaceobject
+            delete();       // NON RIMUOVE I PROIETTILI PROBLEMA STA CHE NON ME LI AGGIUNGE AI LOOPABLE
         }
-         //asteroide.expolosion(x,y);
+        destroy();
+ 
     }
 
     /*RENDERING*/

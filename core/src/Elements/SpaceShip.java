@@ -22,16 +22,16 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private float max_speed;
     private Polygon Spaceship;   //polygon contenuto nella libreria gdx
     private float[] vertices;
-    private final int width;
-    private final int height;
+    private float width;
+    private float height;
     private ArrayList<Bullet> bullets;     //array di proiettili 
-    private Bullet b;
+    //private Bullet b;
 
     /*COSTRUTTORE*/
     public SpaceShip(float x, float y) {
         super(x, y);                    //richiamo costruttore della superclasse spaceobject
-        width = Gdx.graphics.getWidth();  //larghezza della finestra
-        height = Gdx.graphics.getHeight(); //altezza finestra
+        width = Game.get().getWidth(); //larghezza della finestra
+        height =Game.get().getHeight(); //altezza finestra
 
         /*Array punti spaceship*/
         vertices = new float[]{
@@ -56,13 +56,14 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         shoot();             //sparare
 
         /*RIMOZIONE PROIETTILE*/
-        if (Gdx.input.isKeyJustPressed(Keys.A))
+        if (Gdx.input.isKeyJustPressed(Keys.A)) {
             for (int i = 0; i < bullets.size(); i++) {
-                if (millis() > 11000) {
+                    
                     bullets.remove(i);
-                }
+                
                 i--;
             }
+        }
     }
 
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
@@ -117,7 +118,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //iskeyjustpressed restituisce true se il tasto è appena stato premuto
             vertices = Spaceship.getTransformedVertices();
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
-
+            System.out.println(bullets);
         }
         for (Bullet b : bullets) {
             b.loop();

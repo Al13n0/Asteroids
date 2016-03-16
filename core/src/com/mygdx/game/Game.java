@@ -40,11 +40,14 @@ public class Game extends ApplicationAdapter {
         renderables = new ArrayList();
         loopables = new ArrayList();
         ship = new SpaceShip(100, 100);
-        asteroidi = new ArrayList();
-        /*CREAZIONE ASTEROIDI*/
-        for (int i = 0; i < 4; i++) {
-            asteroidi.add(new Asteroid(MathUtils.random(200, 400), MathUtils.random(200, 400)));
+        asteroidi = new ArrayList();         
+       
+        /*ISTANZO ASTEROIDI*/
+        for (int i = 0; i < 4; i++){
+           asteroidi.add(new Asteroid(MathUtils.random(200, 400), MathUtils.random(200, 400))); //aggiungo asteroide alla lista
+
         }
+       
     }
 
    
@@ -64,7 +67,7 @@ public class Game extends ApplicationAdapter {
         for (Renderable r : renderables) {  // per ogni elemento dll arraylist faccio il render
             r.render(sr);
         }
-        loop();   //proiettili   va corretto devono essere pure loro renderizzabili
+        loop();          //loop del gioco
     }
 
     /*LOOP DEGLI OGGETTI*/
@@ -76,6 +79,8 @@ public class Game extends ApplicationAdapter {
                 break;
             }
         }
+        System.out.println(renderables);
+         //System.out.println(loopables);
     }
 
     /*FUNZIONI PER AGGIUNGERE UN OGGETTO ALL'ARRAYLIST DEI RENDERABLE*/
@@ -106,15 +111,18 @@ public class Game extends ApplicationAdapter {
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
     }
-
-    public static Game get() {
+   
+    /*FUNZIONE STATICA CHE  RITORNA UN OGGETTO GAME*/
+    public static Game get() {                        //metodo statico associato alla classe non all'istanza
         return game;
     }
-
+    
+   /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
     public float getWidth() {
         return width;
     }
-
+    
+    /*FUNZIONE CHE RITORNA L'ALTEZZA DELLA FINESTRA*/
     public float getHeight() {
         return height;
     }

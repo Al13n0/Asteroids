@@ -40,7 +40,6 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
             y = Game.get().getHeight();
         }
         asteroid.setPosition(x, y);
-
     }
 
     /*FUNZIONE PER GENERARE PUNTI CASUALI DEGLI ASTEROIDI*/
@@ -75,11 +74,14 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         }
     }
 
-    /*ESPLOSIONE*/
-    public void expolosion(float xb, float yb) {
+    /*COLLISSIONE*/
+    public boolean collision(float xb, float yb) {
         if (asteroid.contains(xb, yb)) {  //ritorna true se il punto è contenuto nel asteroide
-            System.out.println("esploso");
+                asteroid.setScale((float) 0.6,(float) 0.7);     //scalo asteroide
+                //this.clone();
+            //delete();
         }
+        return true;
     }
 
     /*LOGICA ASTEROIDE*/
