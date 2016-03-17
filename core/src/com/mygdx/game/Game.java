@@ -44,9 +44,10 @@ public class Game extends ApplicationAdapter {
        
         /*ISTANZO ASTEROIDI*/
         for (int i = 0; i < 4; i++){
-           asteroidi.add(new Asteroid(MathUtils.random(200, 400), MathUtils.random(200, 400))); //aggiungo asteroide alla lista
+           asteroidi.add(new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
 
         }
+             System.out.println(renderables);
        
     }
 
@@ -79,8 +80,6 @@ public class Game extends ApplicationAdapter {
                 break;
             }
         }
-        System.out.println(renderables);
-         //System.out.println(loopables);
     }
 
     /*FUNZIONI PER AGGIUNGERE UN OGGETTO ALL'ARRAYLIST DEI RENDERABLE*/

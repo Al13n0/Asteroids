@@ -54,7 +54,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         move();              //movimento astronave
         overScreen(x, y);    //controlla che astronvave non esce schermo
         shoot();             //sparare
-
+        //destroy();
         /*RIMOZIONE PROIETTILE*/
         if (Gdx.input.isKeyJustPressed(Keys.A)) {
             for (int i = 0; i < bullets.size(); i++) {
@@ -118,14 +118,25 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //iskeyjustpressed restituisce true se il tasto è appena stato premuto
             vertices = Spaceship.getTransformedVertices();
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
-            System.out.println(bullets);
+            //System.out.println(bullets);
         }
         for (Bullet b : bullets) {
             b.loop();
         }
 
     }
-
+ 
+ /*DISTRUZIONE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
+    public void destroy(){
+         for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
+            if(a.collision(x, y))
+            {
+                delete();  
+            }
+        }
+    }
+    
+ /*RENDERING ASTRONAVE*/
     @Override
     public void render(ShapeRenderer sr) {
         sr.begin(ShapeType.Line);
