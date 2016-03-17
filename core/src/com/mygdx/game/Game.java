@@ -45,8 +45,13 @@ public class Game extends ApplicationAdapter {
         /*ISTANZO ASTEROIDI*/
         for (int i = 0; i < 4; i++){
            asteroidi.add(new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
-
-        }
+           
+           /*Asteroid a,b;
+           a=new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400));
+           b=a;*/
+           
+        }   
+            
              System.out.println(renderables);
        
     }
@@ -125,5 +130,7 @@ public class Game extends ApplicationAdapter {
     public float getHeight() {
         return height;
     }
-    
+      public ArrayList<Renderable> getRenderable() {                        //metodo statico associato alla classe non all'istanza
+        return  renderables;
+    }
 }

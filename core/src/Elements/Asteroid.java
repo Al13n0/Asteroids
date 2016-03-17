@@ -14,7 +14,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     private final float[] vertices;     //array punti asteroide
     private final Polygon asteroid;     //polygon contenuto nella libreria gdx
     private int npunti;                 //N punti del poligono asteroide
-   
+
     public Asteroid(float x, float y) {
         super(x, y);
 
@@ -75,13 +75,15 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     /*COLLISSIONE*/
-    public boolean collision(float xb, float yb) {
-        if (asteroid.contains(xb, yb)) {  //ritorna true se il punto è contenuto nel asteroide
-                asteroid.setScale((float) 0.6,(float) 0.7);     //scalo asteroide
-                //this.clone();
+   public boolean containsxy(float x,float y){
+       return asteroid.contains(x, y);
+   }
+    public void  collision(float xb, float yb) {
+            
+            //Asteroid s = new Asteroid(1, yb);
+            asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
             //delete();
-        }
-        return true;
+           //s.asteroid.setScale((float) 0.6, (float) 0.7);
     }
 
     /*LOGICA ASTEROIDE*/
