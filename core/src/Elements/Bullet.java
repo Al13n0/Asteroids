@@ -8,12 +8,13 @@ import interfaces.Loopable;
 import interfaces.Renderable;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import java.util.ArrayList;
 
 public class Bullet extends SpaceObject implements Renderable, Loopable {
 
-
     private float rad;           //angolo generato punta astronave (uso per direzione sparare)
     private float speed;
+
     public Bullet(float x, float y, float rad) {
         super(x, y);
         this.x = x;
@@ -27,33 +28,57 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
         x += (float) sin(Math.toRadians(-rad)) * speed;
         y += (float) cos(Math.toRadians(rad)) * speed;
         //delete();
-        
+
     }
 
     /*CONTROLLO USCITA SCHERMO*/
     public boolean overscreen() {
         return x > Game.get().getWidth() || x < 0 || y > Game.get().getHeight() || y < 0;
     }
+
+/*-------------------------------!!! DA FIXARE------------------------------------------------------------------------------------------------------------------------------*/
+ 
+    /*PROTOTIPO 1*/
     
-    /*DISTRUZIONE ASTEROIDE QUANDOO PROIETTILE INCONTRA ASTEROIDE*/
-    public void destroy(){
-        //for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
-           for(int i=0; i<Game.get().getAsteroidi().size();i++){
-             if(Game.get().getAsteroidi().containsxy(x, y))
-            {  a.collision(x,y);
-                delete();    /*!!! DA FIXARE (per gli altri oggetti va)*/
-                System.out.println("ciao");
+ /*DISTRUZIONE ASTEROIDE QUANDOO PROIETTILE COLLIDE CON  ASTEROIDE*/
+    public void destroy() {
+        for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {   // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
+            if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
+                Game.get().getAsteroidi().get(i).collision(x, y);
+                delete();
+                i--;
+                /*!!! DA FIXARE*/
                 break;
             }
         }
     }
-    
+
+    /*PROTOTIPO 2
+    /*FUNZIONE CHE DISTRUGGE GLI ASTEROIDI SE VENGONO COLPITI DA UN PROIETTILE */
+    public void checkCollision() {
+        for (int i = 0; i < Game.get().getShip().getBullets().size(); i++) {
+            Bullet b = Game.get().getShip().getBullets().get(i);
+            for (int j = 0; j < Game.get().getAsteroidi().size(); j++) {
+                Asteroid a = Game.get().getAsteroidi().get(i);
+                if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
+                    Game.get().getAsteroidi().get(i).collision(x, y);
+                    delete();
+                    j--;
+                    /*!!! DA FIXARE*/
+                    break;
+                }
+                i--;
+            }
+        }
+    }
+     //nessuno dei due prototipi funziona mannaggia chiedere a enrico
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
     /*LOGICA DEL PROGRAMMA*/
     @Override
     public void loop() {
         move();
         if (overscreen()) { //se proiettile esce da schermo lo elimino
-            delete();     
+            delete();
         }
         destroy();
     }

@@ -4,37 +4,35 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import static com.badlogic.gdx.utils.TimeUtils.millis;
 import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
     private float x, y, speed;
-    private float max_speed;
-    private Polygon Spaceship;   //polygon contenuto nella libreria gdx
+    private final float max_speed;
+    private final Polygon Spaceship;   //polygon contenuto nella libreria gdx
     private float[] vertices;
-    private float width;
-    private float height;
+    private final float width;
+    private final float height;
     private int lifes;            //vite del giocatore
-    private ArrayList<Bullet> bullets;     //array di proiettili 
-    //private Bullet b;
-
+    private final ArrayList<Bullet> bullets;     //array di proiettili 
+    private final Sound sparo;               //Sound è un interfaccia messa a disposizione dalla libreria
+    private final Sound espolisonenave;
     /*COSTRUTTORE*/
     public SpaceShip(float x, float y, int life) {
         super(x, y);                    //richiamo costruttore della superclasse spaceobject
         width = Game.get().getWidth(); //larghezza della finestra
         height = Game.get().getHeight(); //altezza finestra
         lifes = life;                    //vite del giocatore
-
         /*Array punti spaceship*/
         vertices = new float[]{
             width / 2, height / 2 - 10,
@@ -45,20 +43,22 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         };
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 3.4;
+        max_speed = (float) 4;
         bullets = new ArrayList<Bullet>();
+        sparo=Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
+        espolisonenave=Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));  
 
     }
-
+    
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
-            speed += 0.1;
+            speed += 0.2;
         } else if (speed < 0) {
             speed = 0;
         } else if (speed != 0) {
-            speed -= 0.05;
+            speed -= 0.03;
         }
         if (speed > max_speed) {
             speed = max_speed;
@@ -71,11 +71,13 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     /*FUNZIONE PER RUOTARE LA SPACESHIP*/
     public void rotate() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Spaceship.rotate((float) (2));
+            Spaceship.rotate((float) (1.5));
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Spaceship.rotate((float) (-2));
+            Spaceship.rotate((float) (-1.5));
         }
     }
+    
+  
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
     public void overScreen(float x, float y) {
@@ -102,21 +104,22 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //iskeyjustpressed restituisce true se il tasto è appena stato premuto
             vertices = Spaceship.getTransformedVertices();
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
-            System.out.println(bullets);
-            System.out.println(Game.get().getRenderable());
+            sparo.play(1.0f); //1.0f rappresenta il volume
         }
         for (Bullet b : bullets) {
             b.loop();
+           
         }
-
+        
     }
 
-    /*DISTRUZIONE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
+    /* FUNZIONE CHE DISTRUGGE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
     public void destroy(float x, float y) {
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (a.containsxy(x, y)) {
                 delete();
                 lifes--;
+                espolisonenave.play(1.0f);
                 System.out.println("MORTO");
                 System.out.println(lifes);
            
@@ -128,14 +131,19 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
                 }
 
             }
-
         }
     }
+
+   public ArrayList<Bullet> getBullets() {
+       return bullets;
+   }
 
     /*FUNZIONE PER RIGENERARE ASTRONAVE DOPO ESSERE STATA DISTRUTTA*/
     public void rigenerate() {
         new SpaceShip(100, 100, lifes);
     }
+    
+   
 
     /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
     @Override

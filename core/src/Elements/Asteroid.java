@@ -1,6 +1,7 @@
 package Elements;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,13 +15,16 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     private final float[] vertices;     //array punti asteroide
     private final Polygon asteroid;     //polygon contenuto nella libreria gdx
     private int npunti;                 //N punti del poligono asteroide
+    private Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
 
+    /*COSTRUTTORE ASTEROIDE*/
     public Asteroid(float x, float y) {
         super(x, y);
 
         vertices = genera();
         asteroid = new Polygon(vertices);
         asteroid.setPosition(x, y);
+        esplosione=Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
     }
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
@@ -72,20 +76,21 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         } else {
             asteroid.rotate((float) +1.2);
         }
+       
     }
 
     /*COLLISSIONE*/
-   public boolean containsxy(float x,float y){
-       return asteroid.contains(x, y);
-   }
-    public void  collision(float xb, float yb) {
-            
-            //Asteroid s = new Asteroid(1, yb);
-            asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
-            //delete();
-           //s.asteroid.setScale((float) 0.6, (float) 0.7);
+    public boolean containsxy(float x, float y) {
+        return asteroid.contains(x, y);        //ritorna true se punti del bullet sono contenuti nel poligono
     }
 
+    public void collision(float xb, float yb) {
+        //Asteroid s = new Asteroid(xb, yb);      /*fixare ne crea TROPPi!!*/
+        esplosione.play();
+        asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
+        //delete();
+    }
+ 
     /*LOGICA ASTEROIDE*/
     @Override
     public void loop() {

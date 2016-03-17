@@ -27,7 +27,6 @@ public class Game extends ApplicationAdapter {
     private ArrayList<Asteroid> asteroidi;       //arraylist degli asteroidi
     private float width;
     private float height;
-
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
     public void create() {
@@ -39,22 +38,18 @@ public class Game extends ApplicationAdapter {
         height = Gdx.graphics.getHeight();      //altezza finestra
         renderables = new ArrayList();
         loopables = new ArrayList();
-        ship = new SpaceShip(100, 100,3);     //creo una nuova astronave passangoli le cordinate e le vite
-        asteroidi = new ArrayList();         
-       
+        ship = new SpaceShip(100, 100, 3);     //creo una nuova astronave passangoli le cordinate e le vite
+        asteroidi = new ArrayList();
+        
+
         /*ISTANZO ASTEROIDI*/
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
            asteroidi.add(new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
-           
-           /*Asteroid a,b;
-           a=new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400));
-           b=a;*/
-           
-        }   
-             
+
+        }
+
     }
 
-   
     /*FUNZIONE MAIN*/
     public void main() {
         render();
@@ -113,22 +108,27 @@ public class Game extends ApplicationAdapter {
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
     }
-   
+
     /*FUNZIONE STATICA CHE  RITORNA UN OGGETTO GAME*/
     public static Game get() {                        //metodo statico associato alla classe non all'istanza
         return game;
     }
-    
-   /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
+
+    /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
     public float getWidth() {
         return width;
     }
-    
+
     /*FUNZIONE CHE RITORNA L'ALTEZZA DELLA FINESTRA*/
     public float getHeight() {
         return height;
     }
-      public ArrayList<Renderable> getRenderable() {                        //metodo statico associato alla classe non all'istanza
-        return  renderables;
+
+    public SpaceShip getShip() {
+        return ship;
+    }
+
+    public ArrayList<Renderable> getRenderable() {                        //metodo statico associato alla classe non all'istanza
+        return renderables;
     }
 }
