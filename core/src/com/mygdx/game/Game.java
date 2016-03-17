@@ -39,7 +39,7 @@ public class Game extends ApplicationAdapter {
         height = Gdx.graphics.getHeight();      //altezza finestra
         renderables = new ArrayList();
         loopables = new ArrayList();
-        ship = new SpaceShip(100, 100);
+        ship = new SpaceShip(100, 100,3);     //creo una nuova astronave passangoli le cordinate e le vite
         asteroidi = new ArrayList();         
        
         /*ISTANZO ASTEROIDI*/
@@ -51,9 +51,7 @@ public class Game extends ApplicationAdapter {
            b=a;*/
            
         }   
-            
-             System.out.println(renderables);
-       
+             
     }
 
    

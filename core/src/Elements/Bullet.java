@@ -26,7 +26,8 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     public void move() {
         x += (float) sin(Math.toRadians(-rad)) * speed;
         y += (float) cos(Math.toRadians(rad)) * speed;
-
+        //delete();
+        
     }
 
     /*CONTROLLO USCITA SCHERMO*/
@@ -36,10 +37,12 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     
     /*DISTRUZIONE ASTEROIDE QUANDOO PROIETTILE INCONTRA ASTEROIDE*/
     public void destroy(){
-         for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
-            if(a.containsxy(x, y))
+        //for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
+           for(int i=0; i<Game.get().getAsteroidi().size();i++){
+             if(Game.get().getAsteroidi().containsxy(x, y))
             {  a.collision(x,y);
                 delete();    /*!!! DA FIXARE (per gli altri oggetti va)*/
+                System.out.println("ciao");
                 break;
             }
         }
@@ -50,10 +53,9 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     public void loop() {
         move();
         if (overscreen()) { //se proiettile esce da schermo lo elimino
-            delete();       // NON RIMUOVE I PROIETTILI PROBLEMA STA CHE NON ME LI AGGIUNGE AI LOOPABLE
+            delete();     
         }
         destroy();
- 
     }
 
     /*RENDERING*/

@@ -24,14 +24,16 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private float[] vertices;
     private float width;
     private float height;
+    private int lifes;            //vite del giocatore
     private ArrayList<Bullet> bullets;     //array di proiettili 
     //private Bullet b;
 
     /*COSTRUTTORE*/
-    public SpaceShip(float x, float y) {
+    public SpaceShip(float x, float y, int life) {
         super(x, y);                    //richiamo costruttore della superclasse spaceobject
         width = Game.get().getWidth(); //larghezza della finestra
-        height =Game.get().getHeight(); //altezza finestra
+        height = Game.get().getHeight(); //altezza finestra
+        lifes = life;                    //vite del giocatore
 
         /*Array punti spaceship*/
         vertices = new float[]{
@@ -43,19 +45,9 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         };
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 3.2;
+        max_speed = (float) 3.4;
         bullets = new ArrayList<Bullet>();
 
-    }
-
-    /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
-    @Override
-    public void loop() {
-        move();              //movimento astronave
-        overScreen(x, y);    //controlla che astronvave non esce schermo
-        shoot();             //sparare
-        destroy();
- 
     }
 
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
@@ -110,26 +102,52 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //iskeyjustpressed restituisce true se il tasto è appena stato premuto
             vertices = Spaceship.getTransformedVertices();
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
-            //System.out.println(bullets);
+            System.out.println(bullets);
+            System.out.println(Game.get().getRenderable());
         }
         for (Bullet b : bullets) {
             b.loop();
         }
 
     }
- 
- /*DISTRUZIONE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
-    public void destroy(){
-         for (Asteroid a : Game.get().getAsteroidi() ) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
-            if(a.containsxy(x, y))
-            {   
+
+    /*DISTRUZIONE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
+    public void destroy(float x, float y) {
+        for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
+            if (a.containsxy(x, y)) {
                 delete();
+                lifes--;
+                System.out.println("MORTO");
+                System.out.println(lifes);
+           
+             /*CONTROLLO VITE GIOCATORE*/
+                if (lifes > 0) {
+                    rigenerate();
+                } else {
+                    System.out.println("GAME OVER");
+                }
+
             }
-             //delete(); 
+
         }
     }
-    
- /*RENDERING ASTRONAVE*/
+
+    /*FUNZIONE PER RIGENERARE ASTRONAVE DOPO ESSERE STATA DISTRUTTA*/
+    public void rigenerate() {
+        new SpaceShip(100, 100, lifes);
+    }
+
+    /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
+    @Override
+    public void loop() {
+        move();              //movimento astronave
+        overScreen(x, y);    //controlla che astronvave non esce schermo
+        shoot();             //sparare
+        destroy(vertices[4], vertices[5]);
+
+    }
+
+    /*RENDERING ASTRONAVE*/
     @Override
     public void render(ShapeRenderer sr) {
         sr.begin(ShapeType.Line);
