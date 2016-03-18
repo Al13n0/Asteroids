@@ -19,20 +19,24 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
     private float x, y, speed;
     private final float max_speed;
-    private final Polygon Spaceship;   //polygon contenuto nella libreria gdx
+    private final Polygon Spaceship;                            //polygon contenuto nella libreria gdx
     private float[] vertices;
     private final float width;
     private final float height;
-    private int lifes;            //vite del giocatore
-    private final ArrayList<Bullet> bullets;     //array di proiettili 
-    private final Sound sparo;               //Sound è un interfaccia messa a disposizione dalla libreria
+    private int lifes;                                       //vite del giocatore
+    private long score;                                     //score del giocatore
+    private long requiredscore;                             //punteggio richiesto per avere un altra vita
+    private final ArrayList<Bullet> bullets;                //array di proiettili 
+    private final Sound sparo;                               //Sound è un interfaccia messa a disposizione dalla libreria
     private final Sound espolisonenave;
+
     /*COSTRUTTORE*/
     public SpaceShip(float x, float y, int life) {
-        super(x, y);                    //richiamo costruttore della superclasse spaceobject
-        width = Game.get().getWidth(); //larghezza della finestra
-        height = Game.get().getHeight(); //altezza finestra
-        lifes = life;                    //vite del giocatore
+        super(x, y);                                         //richiamo costruttore della superclasse spaceobject
+        width = Game.get().getWidth();                       //larghezza della finestra
+        height = Game.get().getHeight();                     //altezza finestra
+        lifes = life;                                         //vite del giocatore
+
         /*Array punti spaceship*/
         vertices = new float[]{
             width / 2, height / 2 - 10,
@@ -45,18 +49,24 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
         max_speed = (float) 5.4;
         bullets = new ArrayList<Bullet>();
-        sparo=Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
-        espolisonenave=Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));  
+
+        /*SUONI*/
+        sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
+        espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
+
+        /*ATTRIBUTI PLAYER*/
+        score = 0;
+        lifes = life;
 
     }
-    
+
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
-            speed += 0.5;
-        } else if (speed < 0.8) {               //astronave non sara mai immobile
-            speed = (float) 0.8; 
+            speed += 0.4;
+        } else if (speed < 0) {               //astronave non sara mai immobile
+            speed = 0;
         } else if (speed != 0) {
             speed -= 0.03;        //decremento velocita 
         }
@@ -76,8 +86,6 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
             Spaceship.rotate((float) (-2.4));
         }
     }
-    
-  
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
     public void overScreen(float x, float y) {
@@ -108,9 +116,9 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
         for (Bullet b : bullets) {
             b.loop();
-           
+
         }
-        
+
     }
 
     /* FUNZIONE CHE DISTRUGGE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
@@ -122,8 +130,8 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
                 espolisonenave.play(1.0f);
                 System.out.println("MORTO");
                 System.out.println(lifes);
-           
-             /*CONTROLLO VITE GIOCATORE*/
+
+                /*CONTROLLO VITE GIOCATORE*/
                 if (lifes > 0) {
                     rigenerate();
                 } else {
@@ -134,16 +142,23 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
     }
 
-   public ArrayList<Bullet> getBullets() {
-       return bullets;
-   }
+    /*FUNZIONE CHE RITORNA L' ARRAYLIST DEI PROIETTILI*/
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
+    
+    /*FUNZIONE CHE GESTISCE QUANDO ASSEGNARE UNA VITA EXTRA*/
+    public void extralife(){
+        if(score>requiredscore){
+            lifes++;
+            requiredscore+=10000;
+        }
+    }
 
     /*FUNZIONE PER RIGENERARE ASTRONAVE DOPO ESSERE STATA DISTRUTTA*/
     public void rigenerate() {
         new SpaceShip(100, 100, lifes);
     }
-    
-   
 
     /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
     @Override

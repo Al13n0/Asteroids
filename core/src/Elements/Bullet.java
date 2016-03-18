@@ -44,11 +44,11 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     public void destroy() {
         for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {   // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
-                Game.get().getAsteroidi().get(i).collision(x, y);
+                Game.get().getAsteroidi().get(i).collision(x, y);   //recupero la lista di asteroidi prendo un asteroide e richiamo il suo metodo collision che splitta gli asteroidi e li dovrebbe dividere
                 delete();
                 i--;
                 /*!!! DA FIXARE*/
-                break;
+                break;               //brutto da vedere 
             }
         }
     }

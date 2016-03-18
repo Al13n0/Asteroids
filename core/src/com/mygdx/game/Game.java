@@ -8,25 +8,32 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter {
 
-    private static Game game;                    //variabile statica che assumerà stesso valore per ogni oggetto classe
+    private static Game game;                     //variabile statica che assumerà stesso valore per ogni oggetto classe
 
-    private OrthographicCamera camera;           //telecamera che renderizza oggetti
+    private OrthographicCamera camera;            //telecamera che renderizza oggetti
     private SpaceShip ship;
-    private ShapeRenderer sr;                   //utilizzo per renderizzare shape 
-    private ArrayList<Renderable> renderables; //arraylist degli oggetti renderizzabili
-    private ArrayList<Loopable> loopables;      //arraylist degli oggetti loopabili
+    private ShapeRenderer sr;                    //utilizzo per renderizzare shape 
+    private ArrayList<Renderable> renderables;   //arraylist degli oggetti renderizzabili
+    private ArrayList<Loopable> loopables;       //arraylist degli oggetti loopabili
     private ArrayList<Asteroid> asteroidi;       //arraylist degli asteroidi
     private float width;
     private float height;
+    private long shore;
+    
+   
+    
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
     public void create() {
@@ -41,13 +48,8 @@ public class Game extends ApplicationAdapter {
         ship = new SpaceShip(100, 100, 3);     //creo una nuova astronave passangoli le cordinate e le vite
         asteroidi = new ArrayList();
         
-
-        /*ISTANZO ASTEROIDI*/
-        for (int i = 0; i < 4; i++) {
-           asteroidi.add(new Asteroid(MathUtils.random(100, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
-
-        }
-
+        spawnAsteroids();                      //faccio la spawn degli asteroidi
+    
     }
 
     /*FUNZIONE MAIN*/
@@ -75,6 +77,7 @@ public class Game extends ApplicationAdapter {
             try {
                 loopables.get(i).loop(); //Nel loop è contenuta la logica degli oggetti
             } catch (Exception x) {
+               //x.printStackTrace();
                 break;
             }
         }
@@ -103,8 +106,16 @@ public class Game extends ApplicationAdapter {
             renderables.remove((Renderable) o);
         }
     }
+    
+    /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
+    public void spawnAsteroids(){
+         for (int i = 0; i < 4; i++) {
+           asteroidi.add(new Asteroid(MathUtils.random(251, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
 
-    /*FUNZIONE CHE RITORNA UN OGGETTO ASTEROIDE*/
+        }
+    }
+
+    /*FUNZIONE CHE RITORNA ARRAYLIST DI  ASTEROIDI*/
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
     }
@@ -124,11 +135,13 @@ public class Game extends ApplicationAdapter {
         return height;
     }
 
+    /*FUNZIONE CHE RITORNA UN ASTRONAVE*/
     public SpaceShip getShip() {
         return ship;
     }
-
-    public ArrayList<Renderable> getRenderable() {                        //metodo statico associato alla classe non all'istanza
+    
+    /*FUNZIOEN CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
+    public ArrayList<Renderable> getRenderable() {                        
         return renderables;
     }
 }
