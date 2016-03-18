@@ -43,7 +43,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         };
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 4;
+        max_speed = (float) 5.4;
         bullets = new ArrayList<Bullet>();
         sparo=Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
         espolisonenave=Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));  
@@ -54,11 +54,11 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
-            speed += 0.2;
-        } else if (speed < 0) {
-            speed = 0;
+            speed += 0.5;
+        } else if (speed < 0.8) {               //astronave non sara mai immobile
+            speed = (float) 0.8; 
         } else if (speed != 0) {
-            speed -= 0.03;
+            speed -= 0.03;        //decremento velocita 
         }
         if (speed > max_speed) {
             speed = max_speed;
@@ -71,9 +71,9 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     /*FUNZIONE PER RUOTARE LA SPACESHIP*/
     public void rotate() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Spaceship.rotate((float) (1.5));
+            Spaceship.rotate((float) (2.4));
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Spaceship.rotate((float) (-1.5));
+            Spaceship.rotate((float) (-2.4));
         }
     }
     
