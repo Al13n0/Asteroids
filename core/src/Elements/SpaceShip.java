@@ -1,15 +1,11 @@
 package Elements;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import static com.badlogic.gdx.utils.TimeUtils.millis;
 import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
@@ -54,9 +50,10 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
         espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
 
-        /*ATTRIBUTI PLAYER*/
+        /*ATTRIBUTI PLAYER E PARTITA*/
         score = 0;
         lifes = life;
+        requiredscore = 10000;
 
     }
 
@@ -126,10 +123,10 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (a.containsxy(x, y)) {
                 delete();
-                lifes--;
+                loseLife();
                 espolisonenave.play(1.0f);
                 System.out.println("MORTO");
-                System.out.println(lifes);
+                System.out.println(getLifes());
 
                 /*CONTROLLO VITE GIOCATORE*/
                 if (lifes > 0) {
@@ -146,12 +143,33 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
+
+    /*FUNZIONE CHE RITORNA PUNTEGGIO GIOCATORE*/
+    public long getScore() {
+        return score;
+    }
     
+    /*FUNZIONE CHE INCREMENTA IL PUNTEGGIO DEL PLAYER*/
+    public void incrementScore(long l){
+        score+=l;                       //l sara un numero diverso a seconda dell'asteroide distrutto
+    }
+    
+    /*FUNZIONE CHE RITORNA LE VITE DEL PLAYER*/
+    public int getLifes() {
+        return lifes;
+    }
+   
+    /*FUNZIONE CHE ELIMINA UNA VITA AL PLAYER*/
+    public void loseLife(){
+        lifes--;
+    }
+    
+
     /*FUNZIONE CHE GESTISCE QUANDO ASSEGNARE UNA VITA EXTRA*/
-    public void extralife(){
-        if(score>requiredscore){
+    public void extralife() {
+        if (score > requiredscore) {
             lifes++;
-            requiredscore+=10000;
+            requiredscore += 10000;
         }
     }
 
