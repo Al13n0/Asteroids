@@ -46,6 +46,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
                 Game.get().getAsteroidi().get(i).collision(x, y);   //recupero la lista di asteroidi prendo un asteroide e richiamo il suo metodo collision che splitta gli asteroidi e li dovrebbe dividere
                 delete();
+                Game.get().getShip().incrementScore(10);     //Incremento score del giocatore
                 i--;
                 /*!!! DA FIXARE*/
                 break;               //brutto da vedere 

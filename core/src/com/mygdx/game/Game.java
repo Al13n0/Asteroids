@@ -5,9 +5,13 @@ import Elements.Bullet;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import interfaces.Loopable;
@@ -18,45 +22,50 @@ public class Game extends ApplicationAdapter {
 
     private static Game game;                    //variabile statica che assumerà stesso valore per ogni oggetto classe
     private int level;
-
     private OrthographicCamera camera;            //telecamera che renderizza oggetti
     private SpaceShip ship;
     private ShapeRenderer sr;                    //utilizzo per renderizzare shape 
     private SpriteBatch sb;                       //utilizzo per renderizzare testo
-
+    private BitmapFont font;                       //genera fonts da un file pngs
     private ArrayList<Renderable> renderables;   //arraylist degli oggetti renderizzabili
     private ArrayList<Loopable> loopables;       //arraylist degli oggetti loopabili
     private ArrayList<Asteroid> asteroidi;       //arraylist degli asteroidi
 
     private float width;
     private float height;
+    public int lifes;
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
     public void create() {
         game = this;
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        level=0;
-        sr = new ShapeRenderer();
-        sb = new SpriteBatch();
+
+        sr = new ShapeRenderer();                //renderizzo shape
+        sb = new SpriteBatch();                  //renderizzo texture e testo
+
         width = Gdx.graphics.getWidth();        //larghezza della finestra
         height = Gdx.graphics.getHeight();      //altezza finestra
+
         renderables = new ArrayList();
         loopables = new ArrayList();
-        ship = new SpaceShip(100, 100, 3);     //creo una nuova astronave passangoli le cordinate e le vite
+
+        ship = new SpaceShip(100, 100);     //creo una nuova astronave passangoli le cordinate e le vite
         asteroidi = new ArrayList();
-  
+        lifes = 3;
+
+        fontGenerator();                        //generazione font                   
+
         spawnAsteroids();                      //faccio la spawn degli asteroidi
 
     }
 
     /*FUNZIONE MAIN*/
     public void main() {
-  
-        render();
-        
 
+        render();
     }
 
     /*RENDERING*/
@@ -70,7 +79,17 @@ public class Game extends ApplicationAdapter {
             r.render(sr);
         }
         loop();          //loop del gioco
-         System.out.println(getAsteroidi());
+        draw(Long.toString(game.ship.getScore()), 25, 455);
+
+        
+    }
+
+    /*FUNZIONE PER DISEGNARE STRINGHE A VIDEO*/
+    public void draw(String stringa, float width, float height) {
+        sb.setColor(1, 1, 1, 1);
+        sb.begin();
+        font.draw(sb, stringa, width, height);
+        sb.end();
     }
 
     /*LOOP DEGLI OGGETTI*/
@@ -81,6 +100,9 @@ public class Game extends ApplicationAdapter {
             } catch (Exception x) {
                 //x.printStackTrace();
                 break;
+            }
+            if (game.lifes == 0) {
+                Game.get().draw("GAME OVER", width /2 -50, height / 2);
             }
         }
     }
@@ -113,7 +135,6 @@ public class Game extends ApplicationAdapter {
     public void spawnAsteroids() {
         for (int i = 0; i < 4; i++) {
             asteroidi.add(new Asteroid(MathUtils.random(251, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
-
         }
     }
 
@@ -131,13 +152,22 @@ public class Game extends ApplicationAdapter {
     public int getLevel() {
         return level;
     }
-   
-    /*checkLevel*/
-    public void incrementLevel(){
-        if(asteroidi.size()<0){
-           level++; 
+
+    /*FUNZIONE CHE INCREMENTA IL LIVELLO SE NON CI SONO PIU ASTEROIDI*/
+    public void incrementLevel() {
+        if (asteroidi.size() < 0) {
+            level++;
         }
-      
+    }
+
+    /*FUNZIONE CHE RITORNA LE VITE RIMASTE AL PLAYER*/
+    public int getlife() {
+        return lifes;
+    }
+
+    /*FUNZIONE CHE ELIMINA UNA VITA AL GIOCATORE*/
+    public void loseLife() {
+        lifes--;
     }
 
     /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
@@ -158,5 +188,15 @@ public class Game extends ApplicationAdapter {
     /*FUNZIOEN CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
     public ArrayList<Renderable> getRenderable() {
         return renderables;
+    }
+
+    /*FUNZIONE CHE GENERA IL FONT E I SUOI PARAMETRI*/
+    public void fontGenerator() {
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(
+                Gdx.files.internal("fonts/Hyperspace Bold.ttf")     //sono nella cartella android/assets
+        );
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 27;                       //rappresenta la dimesione del fonts
+        font = gen.generateFont(parameter);
     }
 }

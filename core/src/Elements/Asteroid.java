@@ -72,7 +72,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     /*ROTAZIONE*/
     public void rotate() {
         if (npunti % 2 == 0) {    //rotazione dipende da numero punti asteroide 
-            asteroid.rotate((float) -1.2);
+            asteroid.rotate((float) -1.5);
         } else {
             asteroid.rotate((float) +1.2);
         }
@@ -86,9 +86,9 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
 
     public void collision(float xb, float yb) {
        // Asteroid s = new Asteroid(xb, yb);      /*fixare ne crea TROPPi!!*/
-        esplosione.play();  
-       // asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
-        delete();
+        esplosione.play(0.4f);  
+        asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
+        //delete();
     }
  
     /*LOGICA ASTEROIDE*/

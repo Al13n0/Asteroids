@@ -27,11 +27,11 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private final Sound espolisonenave;
 
     /*COSTRUTTORE*/
-    public SpaceShip(float x, float y, int life) {
+    public SpaceShip(float x, float y) {
         super(x, y);                                         //richiamo costruttore della superclasse spaceobject
         width = Game.get().getWidth();                       //larghezza della finestra
         height = Game.get().getHeight();                     //altezza finestra
-        lifes = life;                                         //vite del giocatore
+
 
         /*Array punti spaceship*/
         vertices = new float[]{
@@ -43,7 +43,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         };
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 5.4;
+        max_speed = (float) 5.2;
         bullets = new ArrayList<Bullet>();
 
         /*SUONI*/
@@ -52,7 +52,6 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
         /*ATTRIBUTI PLAYER E PARTITA*/
         score = 0;
-        lifes = life;
         requiredscore = 10000;
 
     }
@@ -61,7 +60,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
-            speed += 0.4;
+            speed += 0.3;
         } else if (speed < 0) {               //astronave non sara mai immobile
             speed = 0;
         } else if (speed != 0) {
@@ -122,19 +121,13 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public void destroy(float x, float y) {
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (a.containsxy(x, y)) {
-                delete();
-                loseLife();
+                delete();                           //cancello astronave
+                Game.get().loseLife();              //elimino una vita al player
                 espolisonenave.play(1.0f);
-                System.out.println("MORTO");
-                System.out.println(getLifes());
-
                 /*CONTROLLO VITE GIOCATORE*/
-                if (lifes > 0) {
+                if (Game.get().lifes > 0) {
                     rigenerate();
-                } else {
-                    System.out.println("GAME OVER");
                 }
-
             }
         }
     }
@@ -148,22 +141,11 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public long getScore() {
         return score;
     }
-    
+
     /*FUNZIONE CHE INCREMENTA IL PUNTEGGIO DEL PLAYER*/
-    public void incrementScore(long l){
-        score+=l;                       //l sara un numero diverso a seconda dell'asteroide distrutto
+    public void incrementScore(long l) {
+        score += l;                       //l sara un numero diverso a seconda dell'asteroide distrutto
     }
-    
-    /*FUNZIONE CHE RITORNA LE VITE DEL PLAYER*/
-    public int getLifes() {
-        return lifes;
-    }
-   
-    /*FUNZIONE CHE ELIMINA UNA VITA AL PLAYER*/
-    public void loseLife(){
-        lifes--;
-    }
-    
 
     /*FUNZIONE CHE GESTISCE QUANDO ASSEGNARE UNA VITA EXTRA*/
     public void extralife() {
@@ -175,7 +157,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
     /*FUNZIONE PER RIGENERARE ASTRONAVE DOPO ESSERE STATA DISTRUTTA*/
     public void rigenerate() {
-        new SpaceShip(100, 100, lifes);
+        new SpaceShip(100, 100);
     }
 
     /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
