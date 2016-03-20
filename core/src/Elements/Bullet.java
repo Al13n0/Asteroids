@@ -2,13 +2,11 @@ package Elements;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import java.util.ArrayList;
 
 public class Bullet extends SpaceObject implements Renderable, Loopable {
 
@@ -46,7 +44,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
                 Game.get().getAsteroidi().get(i).collision(x, y);   //recupero la lista di asteroidi prendo un asteroide e richiamo il suo metodo collision che splitta gli asteroidi e li dovrebbe dividere
                 delete();
-                Game.get().getShip().incrementScore(10);     //Incremento score del giocatore
+                Game.get().incrementScore(10);    //Incremento score del giocatore
                 i--;
                 /*!!! DA FIXARE*/
                 break;               //brutto da vedere 

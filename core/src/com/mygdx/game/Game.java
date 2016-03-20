@@ -1,11 +1,9 @@
 package com.mygdx.game;
 
 import Elements.Asteroid;
-import Elements.Bullet;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,10 +21,14 @@ public class Game extends ApplicationAdapter {
     private static Game game;                    //variabile statica che assumerà stesso valore per ogni oggetto classe
     private int level;
     private OrthographicCamera camera;            //telecamera che renderizza oggetti
-    private SpaceShip ship;
+
+    private SpaceShip ship;                        //rappresenta l'asronave
+    private SpaceShip playerlife;                    //astronavi vite giocatore
+
     private ShapeRenderer sr;                    //utilizzo per renderizzare shape 
     private SpriteBatch sb;                       //utilizzo per renderizzare testo
     private BitmapFont font;                       //genera fonts da un file pngs
+
     private ArrayList<Renderable> renderables;   //arraylist degli oggetti renderizzabili
     private ArrayList<Loopable> loopables;       //arraylist degli oggetti loopabili
     private ArrayList<Asteroid> asteroidi;       //arraylist degli asteroidi
@@ -34,6 +36,8 @@ public class Game extends ApplicationAdapter {
     private float width;
     private float height;
     public int lifes;
+    public long score;
+    private long requiredscore;               //punteggio richiesto per avere un altra vita
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
@@ -52,9 +56,14 @@ public class Game extends ApplicationAdapter {
         renderables = new ArrayList();
         loopables = new ArrayList();
 
-        ship = new SpaceShip(100, 100);     //creo una nuova astronave passangoli le cordinate e le vite
+        ship = new SpaceShip(100, 100);     //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
+
+    /*ATTRIBUTI PARTITA E PLAYER*/
         lifes = 3;
+        level = 1;
+        score=0;
+        requiredscore=10000;                //punti richiesti per vita extra
 
         fontGenerator();                        //generazione font                   
 
@@ -78,14 +87,26 @@ public class Game extends ApplicationAdapter {
         for (Renderable r : renderables) {  // per ogni elemento dll arraylist faccio il render
             r.render(sr);
         }
-        loop();          //loop del gioco
-        draw(Long.toString(game.ship.getScore()), 25, 455);
+        loop();                                //loop del gioco
+        drawLLS();
+    }
 
-        
+    /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
+    public void drawLLS() {
+        drawText("LEVEL: ", 10, 468);
+        drawText(Long.toString(getLevel()), 70, 468);
+
+        drawText("LIFES: ", 370, 468);
+        drawText(Long.toString(getlife()), 435, 468);
+
+        drawText("SCORE: ", 650, 468);
+        drawText(Long.toString(getScore()), 715, 468);
+
+        drawText("©1979 ATARI INC", 330, 35);
     }
 
     /*FUNZIONE PER DISEGNARE STRINGHE A VIDEO*/
-    public void draw(String stringa, float width, float height) {
+    public void drawText(String stringa, float width, float height) {
         sb.setColor(1, 1, 1, 1);
         sb.begin();
         font.draw(sb, stringa, width, height);
@@ -101,9 +122,11 @@ public class Game extends ApplicationAdapter {
                 //x.printStackTrace();
                 break;
             }
-            if (game.lifes == 0) {
-                Game.get().draw("GAME OVER", width /2 -50, height / 2);
+            if (game.lifes <= 0) {
+                lifes = 0;
+                Game.get().drawText("GAME OVER", width / 2 - 50, height / 2);
             }
+            addLife();
         }
     }
 
@@ -170,6 +193,26 @@ public class Game extends ApplicationAdapter {
         lifes--;
     }
 
+    /*FUNZIONE CHE AGGIUNGE UNA VITA AL GIOCATORE*/
+    public void addLife() {
+        if (score >requiredscore) {
+            lifes++;
+            requiredscore += requiredscore;   //ogni 10000 assegno una vita extra
+        }
+
+    }
+
+    /*FUNZIONE CHE RITORNA IL PUNTEGGIO DEL GIOCATORE*/
+    public long getScore() {
+        return score;
+    }
+
+    /*FUNZIONE CHE INCREMENTA  IL PUNTEGGIO DEL GIOCATORE*/
+    public void incrementScore(long n) {
+        score += n;
+      
+    }
+
     /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
     public float getWidth() {
         return width;
@@ -193,10 +236,10 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE CHE GENERA IL FONT E I SUOI PARAMETRI*/
     public void fontGenerator() {
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(
-                Gdx.files.internal("fonts/Hyperspace Bold.ttf")     //sono nella cartella android/assets
+                Gdx.files.internal("fonts/Hyperspace Bold.ttf") //sono nella cartella android/assets
         );
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 27;                       //rappresenta la dimesione del fonts
+        parameter.size = 17;                       //rappresenta la dimesione del font
         font = gen.generateFont(parameter);
     }
 }
