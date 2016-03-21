@@ -4,10 +4,6 @@
   <auxiliary>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-      <group/>
-    </open-files>
-    <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
         <file>file:/home/emanuele/workspace/Asteroids1.1/core/src/Elements/SpaceShip.java</file>
         <file>file:/home/emanuele/workspace/Asteroids1.1/core/src/Elements/Asteroid.java</file>
@@ -16,6 +12,11 @@
         <file>file:/home/emanuele/workspace/Asteroids1.1/core/src/Elements/Bullet.java</file>
         <file>file:/home/emanuele/workspace/Asteroids1.1/core/src/interfaces/Renderable.java</file>
         <file>file:/home/emanuele/workspace/Asteroids1.1/core/src/interfaces/Loopable.java</file>
+      </group>
+    </open-files>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+      <group>
+        <file>file:/home/emanuele/workspace/Asteroids1.1/desktop/src/com/mygdx/game/desktop/DesktopLauncher.java</file>
       </group>
     </open-files>
   </auxiliary>

@@ -1,12 +1,12 @@
 package Elements;
 
+import com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
-import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import java.util.ArrayList;
@@ -41,10 +41,12 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
             width / 2 - 5, height / 2 - 15,
             width / 2, height / 2 - 10
         };
+        
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
         max_speed = (float) 5;
         bullets = new ArrayList<Bullet>();
+        vertices = Spaceship.getTransformedVertices();
 
         /*SUONI*/
         sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
@@ -62,7 +64,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         } else if (speed < 0) {
             speed = 0;
         } else if (speed != 0) {
-            speed -= 0.03;        //decremento velocita 
+            speed -= 0.04;        //decremento velocita 
         }
         if (speed > max_speed) {
             speed = max_speed;
@@ -75,9 +77,9 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     /*FUNZIONE PER RUOTARE LA SPACESHIP*/
     public void rotate() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Spaceship.rotate( (2));
+            Spaceship.rotate((float) (2.2));
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Spaceship.rotate( (-2));
+            Spaceship.rotate((float) (-2.2));
         }
     }
 
@@ -163,4 +165,8 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
     }
 
+    public float[] getVertices() {
+        return vertices;
+    }
+     
 }

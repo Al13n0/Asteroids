@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import Elements.Asteroid;
+import Elements.Asteroid;
+import Elements.SpaceShip;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -23,8 +25,6 @@ public class Game extends ApplicationAdapter {
     private OrthographicCamera camera;            //telecamera che renderizza oggetti
 
     private SpaceShip ship;                        //rappresenta l'asronave
-    private SpaceShip playerlife;                    //astronavi vite giocatore
-
     private ShapeRenderer sr;                    //utilizzo per renderizzare shape 
     private SpriteBatch sb;                       //utilizzo per renderizzare testo
     private BitmapFont font;                       //genera fonts da un file pngs
@@ -59,11 +59,11 @@ public class Game extends ApplicationAdapter {
         ship = new SpaceShip(100, 100);     //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
 
-    /*ATTRIBUTI PARTITA E PLAYER*/
+        /*ATTRIBUTI PARTITA E PLAYER*/
         lifes = 3;
         level = 1;
-        score=0;
-        requiredscore=10000;                //punti richiesti per vita extra
+        score = 0;
+        requiredscore = 10000;                //punti richiesti per vita extra
 
         fontGenerator();                        //generazione font                   
 
@@ -75,6 +75,7 @@ public class Game extends ApplicationAdapter {
     public void main() {
 
         render();
+        dispose();
     }
 
     /*RENDERING*/
@@ -88,11 +89,11 @@ public class Game extends ApplicationAdapter {
             r.render(sr);
         }
         loop();                                //loop del gioco
-        drawLLS();
+        hud();                                 //disegno livello vite e punteggio in alto
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
-    public void drawLLS() {
+    public void hud() {
         drawText("LEVEL: ", 10, 468);
         drawText(Long.toString(getLevel()), 70, 468);
 
@@ -157,7 +158,15 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
     public void spawnAsteroids() {
         for (int i = 0; i < 4; i++) {
-            asteroidi.add(new Asteroid(MathUtils.random(251, 400), MathUtils.random(250, 400))); //aggiungo asteroide alla lista
+
+            int xasteroide = MathUtils.random(420, 800);
+            int yasteroide = MathUtils.random(250, 450);
+            //controllo asteroidi non nascano su Spaceship         
+            if (xasteroide == Game.get().ship.getVertices()[4] && yasteroide == Game.get().ship.getVertices()[5]) {
+                xasteroide += 100;
+                yasteroide += 150;
+            }
+            asteroidi.add(new Asteroid(xasteroide, yasteroide)); //aggiungo asteroide alla lista
         }
     }
 
@@ -195,7 +204,7 @@ public class Game extends ApplicationAdapter {
 
     /*FUNZIONE CHE AGGIUNGE UNA VITA AL GIOCATORE*/
     public void addLife() {
-        if (score >requiredscore) {
+        if (score > requiredscore) {
             lifes++;
             requiredscore += requiredscore;   //ogni 10000 assegno una vita extra
         }
@@ -210,7 +219,7 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE CHE INCREMENTA  IL PUNTEGGIO DEL GIOCATORE*/
     public void incrementScore(long n) {
         score += n;
-      
+
     }
 
     /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
@@ -241,5 +250,12 @@ public class Game extends ApplicationAdapter {
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 17;                       //rappresenta la dimesione del font
         font = gen.generateFont(parameter);
+    }
+ 
+/*FUNZIONE PER AIUTARE IL SISTEMA OPERATIVO A "RIPULIRE" QUANDO CHIUDO GIOCO*/
+    public void dispose(){
+        sb.dispose();
+        sr.dispose();
+        font.dispose();
     }
 }

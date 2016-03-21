@@ -1,8 +1,8 @@
 package Elements;
 
+import com.mygdx.game.Game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 import static java.lang.Math.cos;

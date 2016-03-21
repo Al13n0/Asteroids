@@ -1,12 +1,12 @@
 package Elements;
 
+import com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.mygdx.game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 
@@ -24,7 +24,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         vertices = genera();
         asteroid = new Polygon(vertices);
         asteroid.setPosition(x, y);
-        esplosione=Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
+        esplosione = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
     }
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
@@ -48,7 +48,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
 
     /*FUNZIONE PER GENERARE PUNTI CASUALI DEGLI ASTEROIDI*/
     private float[] genera() {
-        npunti = MathUtils.random(12, 19);    //numero punti asteroidse
+        npunti = MathUtils.random(11, 19);    //numero punti asteroidse
         float[] punti = new float[npunti * 2];   //per due perchè contiene x e y
         float a = (float) (Math.random() * Math.PI * 2);
         for (int i = 0; i < npunti * 2; i += 2) {
@@ -64,19 +64,25 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     /*MOVIMENTO ASTEROIDE*/
     public void move() {
         rotate();
-        x = (float) Math.random();
-        y = (float) Math.random();
+    //direzione pseudocasuale degli asteroidi     !!(provare a pensare variante)!!
+        if (npunti % 2 == 0) {
+            x = (float) (1.5 * (float) Math.random());
+            y = (float) -Math.random();
+        } else {
+            x = -(float) (1.8 * (float) Math.random());
+            y = (float) Math.random();
+        }
 
     }
 
     /*ROTAZIONE*/
     public void rotate() {
         if (npunti % 2 == 0) {    //rotazione dipende da numero punti asteroide 
-            asteroid.rotate((float) -1.5);
+            asteroid.rotate((float) -1.8);
         } else {
             asteroid.rotate((float) +1.2);
         }
-       
+
     }
 
     /*COLLISSIONE*/
@@ -85,12 +91,15 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     public void collision(float xb, float yb) {
-       // Asteroid s = new Asteroid(xb, yb);      /*fixare ne crea TROPPi!!*/
-        esplosione.play(0.4f);  
-        asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
-        //delete();
+        //Asteroid s = new Asteroid(xb, yb);      /*fixare ne crea TROPPi!!*/           /*note creare ne crea tanti mentre divide solo una volta*/
+        esplosione.play(0.4f);
+        asteroid.setScale((float) 0.8, (float) 0.7);     //scalo asteroide
+        //asteroid.dirty();
+       // asteroid.setVertices(asteroid.getTransformedVertices());              
+      
+//delete();
     }
- 
+
     /*LOGICA ASTEROIDE*/
     @Override
     public void loop() {

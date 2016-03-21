@@ -6,7 +6,9 @@ import interfaces.Renderable;
 
 public class SpaceObject {
 
-    protected float x, y, speed;
+    protected float x;
+    protected  float y;
+    protected float speed;
 
     public SpaceObject(float x, float y) {
         this.x = x;
@@ -20,6 +22,7 @@ public class SpaceObject {
     }
     
 /*FUNZIONE PER ELIMINARE OGGETTI*/
+    
     public void delete(){
         Game.get().delete(this);
     }
@@ -44,10 +47,6 @@ public class SpaceObject {
         return speed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-    
-    
+     
 
 }
