@@ -90,6 +90,7 @@ public class Game extends ApplicationAdapter {
         }
         loop();                                //loop del gioco
         hud();                                 //disegno livello vite e punteggio in alto
+       
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
@@ -166,7 +167,7 @@ public class Game extends ApplicationAdapter {
                 xasteroide += 100;
                 yasteroide += 150;
             }
-            new Asteroid(xasteroide, yasteroide); //aggiungo asteroide alla lista
+            new Asteroid(xasteroide, yasteroide); 
         }
     }
 
@@ -252,10 +253,4 @@ public class Game extends ApplicationAdapter {
         font = gen.generateFont(parameter);
     }
  
-/*FUNZIONE PER AIUTARE IL SISTEMA OPERATIVO A "RIPULIRE" QUANDO CHIUDO GIOCO*/
-    public void dispose(){
-        sb.dispose();
-        sr.dispose();
-        font.dispose();
-    }
 }

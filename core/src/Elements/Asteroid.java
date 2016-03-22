@@ -17,15 +17,20 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     private int npunti;                 //N punti del poligono asteroide
     private static Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
 
-    /*COSTRUTTORE ASTEROIDE*/
+    /*COSTRUTTORE ASTEROIDE DEFAULT*/
     public Asteroid(float x, float y) {
-        super(x, y);
+        this(x, y, 45, 15);
+    }
 
-        vertices = genera();
+    public Asteroid(float x, float y, float dimmin, float vardim) {
+        super(x, y);
+        vertices = genera(dimmin, vardim);
         asteroid = new Polygon(vertices);
         asteroid.setPosition(x, y);
         Game.get().getAsteroidi().add(this);
-        if(esplosione == null) esplosione = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
+        if (esplosione == null) {
+            esplosione = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
+        }
     }
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
@@ -48,12 +53,12 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     /*FUNZIONE PER GENERARE PUNTI CASUALI DEGLI ASTEROIDI*/
-    private float[] genera() {
+    private float[] genera(float dimmin, float vardim) {
         npunti = MathUtils.random(11, 19);    //numero punti asteroidse
         float[] punti = new float[npunti * 2];   //per due perchè contiene x e y
         float a = (float) (Math.random() * Math.PI * 2);
         for (int i = 0; i < npunti * 2; i += 2) {
-            float r = (float) (Math.random() * 15 + 41); //raggio circonferenza
+            float r = (float) (Math.random() * vardim + dimmin); //raggio circonferenza
             float spost = (float) (Math.random() * Math.PI * 2 / (npunti * 10));  //serve per non avere asteroidi troppo circolari
             a += (float) (Math.PI * 2 / npunti) + spost - Math.PI * 2 / (npunti * 10 * 2);
             punti[i] = (float) (Math.cos(a) * r);  //x è il coseno dell angolo
@@ -65,7 +70,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     /*MOVIMENTO ASTEROIDE*/
     public void move() {
         rotate();
-    //direzione pseudocasuale degli asteroidi     !!(provare a pensare variante)!!
+        //direzione pseudocasuale degli asteroidi     !!(provare a pensare variante)!!
         if (npunti % 2 == 0) {
             x = (float) (1.5 * (float) Math.random());
             y = (float) -Math.random();
@@ -92,15 +97,16 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     public void collision(float xb, float yb) {
-              /*fixare ne crea TROPPi!!*/           /*note creare ne crea tanti mentre divide solo una volta*/
+        /*fixare ne crea TROPPi!!*/ /*note creare ne crea tanti mentre divide solo una volta*/
         esplosione.play(0.4f);
-        Asteroid s = new Asteroid(xb, yb);
+        //Asteroid s = new Asteroid(xb, yb);
         Asteroid a = new Asteroid(xb, yb);
-        //asteroid.setScale((float) 0.8, (float) 0.7);     //scalo asteroide
+        asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
+        a.asteroid.setScale((float) 0.4, (float) 0.7);
         //asteroid.dirty();
-       // asteroid.setVertices(asteroid.getTransformedVertices());              
-      
-delete();
+        // asteroid.setVertices(asteroid.getTransformedVertices());              
+
+        //delete();
     }
 
     /*LOGICA ASTEROIDE*/
