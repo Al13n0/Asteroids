@@ -38,6 +38,7 @@ public class Game extends ApplicationAdapter {
     public int lifes;
     public long score;
     private long requiredscore;               //punteggio richiesto per avere un altra vita
+    private int num;
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
@@ -56,7 +57,7 @@ public class Game extends ApplicationAdapter {
         renderables = new ArrayList();
         loopables = new ArrayList();
 
-        ship = new SpaceShip(100, 100);     //creo una nuova astronave passangoli le cordinate
+        ship = new SpaceShip(100, 100);        //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
 
         /*ATTRIBUTI PARTITA E PLAYER*/
@@ -64,10 +65,11 @@ public class Game extends ApplicationAdapter {
         level = 1;
         score = 0;
         requiredscore = 10000;                //punti richiesti per vita extra
+        num = 4;
 
         fontGenerator();                        //generazione font                   
 
-        spawnAsteroids();                      //faccio la spawn degli asteroidi
+        spawnAsteroids(num);                     //faccio la spawn degli asteroidi
 
     }
 
@@ -90,7 +92,7 @@ public class Game extends ApplicationAdapter {
         }
         loop();                                //loop del gioco
         hud();                                 //disegno livello vite e punteggio in alto
-       
+
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
@@ -129,6 +131,7 @@ public class Game extends ApplicationAdapter {
                 Game.get().drawText("GAME OVER", width / 2 - 50, height / 2);
             }
             addLife();
+            levelControll();
         }
     }
 
@@ -157,8 +160,8 @@ public class Game extends ApplicationAdapter {
     }
 
     /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
-    public void spawnAsteroids() {
-        for (int i = 0; i < 4; i++) {
+    public void spawnAsteroids(int num) {
+        for (int i = 0; i < num; i++) {
 
             int xasteroide = MathUtils.random(420, 800);
             int yasteroide = MathUtils.random(250, 450);
@@ -167,7 +170,7 @@ public class Game extends ApplicationAdapter {
                 xasteroide += 100;
                 yasteroide += 150;
             }
-            new Asteroid(xasteroide, yasteroide); 
+            new Asteroid(xasteroide, yasteroide);
         }
     }
 
@@ -238,7 +241,7 @@ public class Game extends ApplicationAdapter {
         return ship;
     }
 
-    /*FUNZIOEN CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
+    /*FUNZIONE CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
     public ArrayList<Renderable> getRenderable() {
         return renderables;
     }
@@ -252,5 +255,20 @@ public class Game extends ApplicationAdapter {
         parameter.size = 17;                       //rappresenta la dimesione del font
         font = gen.generateFont(parameter);
     }
- 
+
+    /**
+     * Funzione che controlla l'avanzamento di livello e il numero di asteroidi
+     * da creare a seconda del livello in cui è il giocatore
+     */
+    public void levelControll() {
+        if (asteroidi.size() <= 0) {
+            level++;
+            num += 2;
+            spawnAsteroids(num);
+            if(num==12){
+                num=12;
+            }
+        }
+    }
+
 }
