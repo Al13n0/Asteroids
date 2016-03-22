@@ -15,7 +15,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     private final float[] vertices;     //array punti asteroide
     private final Polygon asteroid;     //polygon contenuto nella libreria gdx
     private int npunti;                 //N punti del poligono asteroide
-    private Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
+    private static Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
 
     /*COSTRUTTORE ASTEROIDE*/
     public Asteroid(float x, float y) {
@@ -24,7 +24,8 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         vertices = genera();
         asteroid = new Polygon(vertices);
         asteroid.setPosition(x, y);
-        esplosione = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
+        Game.get().getAsteroidi().add(this);
+        if(esplosione == null) esplosione = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));     //file contenuto nella cartella Android/assets
     }
 
     /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
@@ -91,13 +92,15 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     public void collision(float xb, float yb) {
-        //Asteroid s = new Asteroid(xb, yb);      /*fixare ne crea TROPPi!!*/           /*note creare ne crea tanti mentre divide solo una volta*/
+              /*fixare ne crea TROPPi!!*/           /*note creare ne crea tanti mentre divide solo una volta*/
         esplosione.play(0.4f);
-        asteroid.setScale((float) 0.8, (float) 0.7);     //scalo asteroide
+        Asteroid s = new Asteroid(xb, yb);
+        Asteroid a = new Asteroid(xb, yb);
+        //asteroid.setScale((float) 0.8, (float) 0.7);     //scalo asteroide
         //asteroid.dirty();
        // asteroid.setVertices(asteroid.getTransformedVertices());              
       
-//delete();
+delete();
     }
 
     /*LOGICA ASTEROIDE*/

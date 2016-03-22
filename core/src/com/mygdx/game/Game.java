@@ -120,7 +120,7 @@ public class Game extends ApplicationAdapter {
             try {
                 loopables.get(i).loop(); //Nel loop è contenuta la logica degli oggetti
             } catch (Exception x) {
-                //x.printStackTrace();
+                x.printStackTrace();
                 break;
             }
             if (game.lifes <= 0) {
@@ -166,7 +166,7 @@ public class Game extends ApplicationAdapter {
                 xasteroide += 100;
                 yasteroide += 150;
             }
-            asteroidi.add(new Asteroid(xasteroide, yasteroide)); //aggiungo asteroide alla lista
+            new Asteroid(xasteroide, yasteroide); //aggiungo asteroide alla lista
         }
     }
 

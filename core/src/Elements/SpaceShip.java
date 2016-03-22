@@ -110,15 +110,11 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
             sparo.play(1.0f); //1.0f rappresenta il volume
         }
-        for (Bullet b : bullets) {
-            b.loop();
-
-        }
-
     }
 
     /* FUNZIONE CHE DISTRUGGE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
-    public void destroy(float x, float y) {
+    public void checkDestruction() {
+        float x = vertices[4], y = vertices[5];
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (a.containsxy(x, y)) {
                 delete();                           //cancello astronave
@@ -149,8 +145,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         move();              //movimento astronave
         overScreen(x, y);    //controlla che astronvave non esce schermo
         shoot();             //sparare
-        destroy(vertices[4], vertices[5]);
-
+        checkDestruction();
     }
 
     /*RENDERING ASTRONAVE*/
