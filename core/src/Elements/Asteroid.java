@@ -16,14 +16,20 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     private final Polygon asteroid;     //polygon contenuto nella libreria gdx
     private int npunti;                 //N punti del poligono asteroide
     private static Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
+    private float dimmin, vardim;
 
-    /*COSTRUTTORE ASTEROIDE DEFAULT*/
-    public Asteroid(float x, float y) {
-        this(x, y, 45, 15);
-    }
-
+    /**
+     * COSTRUTTORE DI ASTEROIDI GRANDI
+     *
+     * @param x xasteroide
+     * @param y yasteroide
+     * @param dimmin dimensione minima di un asteroide
+     * @param vardim variazione nella dimensione dell'asteroide
+     */
     public Asteroid(float x, float y, float dimmin, float vardim) {
         super(x, y);
+        this.vardim = vardim;
+        this.dimmin = dimmin;
         vertices = genera(dimmin, vardim);
         asteroid = new Polygon(vertices);
         asteroid.setPosition(x, y);
@@ -33,7 +39,19 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         }
     }
 
-    /*FUNZIONE CHE SI OCCUPA DELLA GESTIONE DELLA FUORISCITA DALLA FINESTRA*/
+    /**
+     * COSTRUTTORE DEFAULT DI ASTEROIDI GRANDI
+     *
+     * @param x xasteroide
+     * @param y yasteroide
+     */
+    public Asteroid(float x, float y) {
+        this(x, y, 45, 15);
+    }
+
+    /**
+     * Funzione che si occupa della festione delal fuoriuscita dallo schermo
+     */
     public void overScreen() {
         float x = asteroid.getX();
         float y = asteroid.getY();
@@ -67,7 +85,9 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         return punti;
     }
 
-    /*MOVIMENTO ASTEROIDE*/
+    /**
+     * MOVIMENTO ASTEROIDE
+     */
     public void move() {
         rotate();
         //direzione pseudocasuale degli asteroidi     !!(provare a pensare variante)!!
@@ -97,16 +117,12 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     public void collision(float xb, float yb) {
-        /*fixare ne crea TROPPi!!*/ /*note creare ne crea tanti mentre divide solo una volta*/
         esplosione.play(0.4f);
-        //Asteroid s = new Asteroid(xb, yb);
-        Asteroid a = new Asteroid(xb, yb);
-        asteroid.setScale((float) 0.6, (float) 0.7);     //scalo asteroide
-        a.asteroid.setScale((float) 0.4, (float) 0.7);
-        //asteroid.dirty();
-        // asteroid.setVertices(asteroid.getTransformedVertices());              
-
-        //delete();
+        if (dimmin > 15) {
+            new Asteroid(xb, yb, dimmin / 2, vardim / 2);
+            new Asteroid(xb, yb, dimmin / 2, vardim / 2);
+        }
+        delete();
     }
 
     /*LOGICA ASTEROIDE*/
@@ -124,6 +140,12 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         sr.setColor(1, 1, 1, 1);
         sr.polygon(asteroid.getTransformedVertices());
         sr.end();
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        Game.get().getAsteroidi().remove(this);
     }
 
 }

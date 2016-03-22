@@ -91,6 +91,8 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
      * Funzione che si occupa della fuoriuscita dalla finestra
      */
     public void overScreen() {
+        x=Spaceship.getX();
+        y=Spaceship.getY();
         if (x > width / 2) {
             x = -width / 2;
         }
