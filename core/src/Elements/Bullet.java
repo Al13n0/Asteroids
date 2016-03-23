@@ -18,7 +18,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
         this.x = x;
         this.y = y;
         this.rad = rad;
-        speed = (float) 4.5;
+        speed = (float) 5.1;
     }
 
     /**

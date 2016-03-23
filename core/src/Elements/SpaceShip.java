@@ -23,19 +23,23 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private long score;                                     //score del giocatore
     private long requiredscore;                             //punteggio richiesto per avere un altra vita
     private final ArrayList<Bullet> bullets;                //array di proiettili 
-    private final Sound sparo;                               //Sound è un interfaccia messa a disposizione dalla libreria
-    private final Sound espolisonenave;
+    private static Sound sparo;                            //Sound è un interfaccia messa a disposizione dalla libreria
+    private static Sound espolisonenave;
 
     /**
      * Crea una nave alle coordinate date
      * @param x coordinata x
      * @param y coordinate y
+     * la nave è costituita da un poligono i cui vertici vengono inizializzati in
+     *questa funzione tenendo conto dell'altezza e della larghezza della finestra
+     * 
      */
+    
     public SpaceShip(float x, float y) {
-        super(x, y);                                         //richiamo costruttore della superclasse spaceobject
+        super(x, y);                                       
         
-        width = Game.get().getWidth();                       //larghezza della finestra
-        height = Game.get().getHeight();                     //altezza finestra
+        width = Game.get().getWidth();                      
+        height = Game.get().getHeight();                  
         
        /*Array punti spaceship*/
         vertices = new float[]{
@@ -48,14 +52,10 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 5;
+        max_speed = (float) 3.5;
         bullets = new ArrayList<Bullet>();
         vertices = Spaceship.getTransformedVertices();
-
-        /*SUONI*/
-        sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
-        espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
-
+        iniSound();
     }
 
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
@@ -73,22 +73,25 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
         x = (float) Math.cos(Math.toRadians(Spaceship.getRotation())) * speed; //calcolo seno e coseno del angolo generato  dalla rotazione
         y = (float) Math.sin(Math.toRadians(-Spaceship.getRotation())) * speed;
-        Spaceship.translate(y, x);  //traslo i punti tramite funzione libreria
+        Spaceship.translate(y, x);  
     }
 
     /**
-     * Funzione che ruota la nave in base all'input
+     * Funzione che ruota la nave in base all'tasto premuto dal giocatore di
+     * conseguenza viene richiamata la funzione di libreria degli oggetti poligoni
+     * che dato un float ruota automaticamente tutti i punti che costituiscono 
+     * il poligono.
      */
     public void rotate() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Spaceship.rotate((float) (2.2));
+            Spaceship.rotate((float) (2.5));
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Spaceship.rotate((float) (-2.2));
+            Spaceship.rotate((float) (-2.5));
         }
     }
 
-    /**
-     * Funzione che si occupa della fuoriuscita dalla finestra
+    /** 
+     * Funzione che si occupa della fuoriuscita dalla finestra.
      */
     public void overScreen() {
         x=Spaceship.getX();
@@ -109,7 +112,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     }
 
     /**
-     * Funzione per sparare
+     * Funzione per sparare.
      */
     public void shoot() {
         vertices = Spaceship.getTransformedVertices();
@@ -170,6 +173,21 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
     public float[] getVertices() {
         return vertices;
+    }
+    
+    /**
+     * Funzione che inizializza i suoni per l'esplosione della nave e per lo
+     * sparo del proiettile i suoni sono definiti come degli attributi
+     * statici non legati all istanza ma alla classe.
+     */
+    
+    public void iniSound(){
+         if (sparo == null) {
+            sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
+        }
+        if(espolisonenave==null){
+             espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
+        }
     }
 
 }
