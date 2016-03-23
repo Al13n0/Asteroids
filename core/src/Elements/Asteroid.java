@@ -12,20 +12,22 @@ import interfaces.Renderable;
 
 public class Asteroid extends SpaceObject implements Loopable, Renderable {
 
-    private final float[] vertices;     //array punti asteroide
-    private final Polygon asteroid;     //polygon contenuto nella libreria gdx
-    private int npunti;                 //N punti del poligono asteroide
-    private static Sound esplosione;               //Sound è un interfaccia messa a disposizione dalla libreria
+    private final float[] vertices;               //array punti asteroide
+    private final Polygon asteroid;              //polygon contenuto nella libreria gdx
+    private int npunti;                          //N punti del poligono asteroide
+    private static Sound esplosione;            //Sound è un interfaccia messa a disposizione dalla libreria
     private float dimmin, vardim;
 
     /**
-     * COSTRUTTORE DI ASTEROIDI GRANDI
+     * COSTRUTTORE GENERICO ASTEROIDI
      *
      * @param x xasteroide
      * @param y yasteroide
      * @param dimmin dimensione minima di un asteroide
      * @param vardim variazione nella dimensione dell'asteroide
+     * 
      */
+   
     public Asteroid(float x, float y, float dimmin, float vardim) {
         super(x, y);
         this.vardim = vardim;
@@ -43,14 +45,17 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      * COSTRUTTORE DEFAULT DI ASTEROIDI GRANDI
      *
      * @param x xasteroide
-     * @param y yasteroide
+     * @param y yasteroide+
+     *gli asteroidi grandi avranno una dimensione minima di 42 e una
+     * variabilita di forma di 15 
      */
+    
     public Asteroid(float x, float y) {
-        this(x, y, 45, 15);
+        this(x, y, 42, 15);
     }
 
     /**
-     * Funzione che si occupa della festione delal fuoriuscita dallo schermo
+     * Funzione che si occupa della gestione della fuoriuscita dallo schermo
      */
     public void overScreen() {
         float x = asteroid.getX();
@@ -129,8 +134,8 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     @Override
     public void loop() {
         move();
-        asteroid.translate(x, y);  //traslo i punti tramite funzione libreria
-        overScreen();    //controlla che asteroide non esca schermo
+        asteroid.translate(x, y);      //traslo i punti tramite funzione libreria
+        overScreen();                 //controlla che asteroide non esca schermo
     }
 
     /*RENDERING*/

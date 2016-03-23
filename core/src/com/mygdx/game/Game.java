@@ -62,14 +62,14 @@ public class Game extends ApplicationAdapter {
 
         /*ATTRIBUTI PARTITA E PLAYER*/
         lifes = 3;
-        level = 1;
+        level = 0;
         score = 0;
         requiredscore = 10000;                //punti richiesti per vita extra
-        num = 4;
+        num = 2;
 
         fontGenerator();                        //generazione font                   
 
-        spawnAsteroids(num);                     //faccio la spawn degli asteroidi
+        levelControll();                     //faccio la spawn degli asteroidi
 
     }
 
@@ -77,7 +77,7 @@ public class Game extends ApplicationAdapter {
     public void main() {
 
         render();
-        dispose();
+
     }
 
     /*RENDERING*/
@@ -161,8 +161,7 @@ public class Game extends ApplicationAdapter {
 
     /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
     public void spawnAsteroids(int num) {
-        for (int i = 0; i < num; i++) {
-
+        for (int i = 1; i <=num; i++) {
             int xasteroide = MathUtils.random(420, 800);
             int yasteroide = MathUtils.random(250, 450);
             //controllo asteroidi non nascano su Spaceship         
@@ -191,9 +190,7 @@ public class Game extends ApplicationAdapter {
 
     /*FUNZIONE CHE INCREMENTA IL LIVELLO SE NON CI SONO PIU ASTEROIDI*/
     public void incrementLevel() {
-        if (asteroidi.size() < 0) {
             level++;
-        }
     }
 
     /*FUNZIONE CHE RITORNA LE VITE RIMASTE AL PLAYER*/
@@ -261,13 +258,14 @@ public class Game extends ApplicationAdapter {
      * da creare a seconda del livello in cui è il giocatore
      */
     public void levelControll() {
-        if (asteroidi.size() <= 0) {
-            level++;
+        if (asteroidi.size()==0) {
+            incrementLevel();
             num += 2;
-            spawnAsteroids(num);
-            if(num==12){
-                num=12;
+            if (num == 12) {
+                num = 12;
             }
+            spawnAsteroids(num);
+            System.out.println(num);
         }
     }
 
