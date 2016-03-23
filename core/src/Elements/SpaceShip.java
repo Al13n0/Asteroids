@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import interfaces.Loopable;
 import interfaces.Renderable;
@@ -26,22 +27,28 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private static Sound sparo;                            //Sound è un interfaccia messa a disposizione dalla libreria
     private static Sound espolisonenave;
 
+    private float dx;
+    private float dy;
+    private float acceleration;
+    private float decelleration;
+    private float maxspeed;
+
     /**
      * Crea una nave alle coordinate date
+     *
      * @param x coordinata x
-     * @param y coordinate y
-     * la nave è costituita da un poligono i cui vertici vengono inizializzati in
-     *questa funzione tenendo conto dell'altezza e della larghezza della finestra
-     * 
+     * @param y coordinate y la nave è costituita da un poligono i cui vertici
+     * vengono inizializzati in questa funzione tenendo conto dell'altezza e
+     * della larghezza della finestra.
+     *
      */
-    
     public SpaceShip(float x, float y) {
-        super(x, y);                                       
-        
-        width = Game.get().getWidth();                      
-        height = Game.get().getHeight();                  
-        
-       /*Array punti spaceship*/
+        super(x, y);
+
+        width = Game.get().getWidth();
+        height = Game.get().getHeight();
+
+        /*Array punti spaceship*/
         vertices = new float[]{
             width / 2, height / 2 - 10,
             width / 2 + 5, height / 2 - 15,
@@ -52,17 +59,20 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
         Spaceship = new Polygon(vertices);
         Spaceship.setOrigin(width / 2, height / 2 - 10); //setto origine poligono per fare la rotazione
-        max_speed = (float) 3.5;
+        max_speed = (float) 3.3;
         bullets = new ArrayList<Bullet>();
         vertices = Spaceship.getTransformedVertices();
         iniSound();
+    
     }
+
+
 
     /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
-            speed += 0.2;
+            speed += 0.75;
         } else if (speed < 0) {
             speed = 0;
         } else if (speed != 0) {
@@ -73,29 +83,29 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
         x = (float) Math.cos(Math.toRadians(Spaceship.getRotation())) * speed; //calcolo seno e coseno del angolo generato  dalla rotazione
         y = (float) Math.sin(Math.toRadians(-Spaceship.getRotation())) * speed;
-        Spaceship.translate(y, x);  
+        Spaceship.translate(y, x);
     }
 
     /**
      * Funzione che ruota la nave in base all'tasto premuto dal giocatore di
-     * conseguenza viene richiamata la funzione di libreria degli oggetti poligoni
-     * che dato un float ruota automaticamente tutti i punti che costituiscono 
-     * il poligono.
+     * conseguenza viene richiamata la funzione di libreria degli oggetti
+     * poligoni che dato un float ruota automaticamente tutti i punti che
+     * costituiscono il poligono.
      */
     public void rotate() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Spaceship.rotate((float) (2.5));
+            Spaceship.rotate((float) (2.7));
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Spaceship.rotate((float) (-2.5));
+            Spaceship.rotate((float) (-2.7));
         }
     }
 
-    /** 
+    /**
      * Funzione che si occupa della fuoriuscita dalla finestra.
      */
     public void overScreen() {
-        x=Spaceship.getX();
-        y=Spaceship.getY();
+        x = Spaceship.getX();
+        y = Spaceship.getY();
         if (x > width / 2) {
             x = -width / 2;
         }
@@ -174,19 +184,18 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     public float[] getVertices() {
         return vertices;
     }
-    
+
     /**
      * Funzione che inizializza i suoni per l'esplosione della nave e per lo
-     * sparo del proiettile i suoni sono definiti come degli attributi
-     * statici non legati all istanza ma alla classe.
+     * sparo del proiettile i suoni sono definiti come degli attributi statici
+     * non legati all istanza ma alla classe.
      */
-    
-    public void iniSound(){
-         if (sparo == null) {
+    public void iniSound() {
+        if (sparo == null) {
             sparo = Gdx.audio.newSound(Gdx.files.internal("explode.ogg"));     //file contenuto nella cartella Android/assets
         }
-        if(espolisonenave==null){
-             espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
+        if (espolisonenave == null) {
+            espolisonenave = Gdx.audio.newSound(Gdx.files.internal("pulsehigh.ogg"));
         }
     }
 

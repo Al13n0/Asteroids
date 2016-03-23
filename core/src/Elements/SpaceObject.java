@@ -9,7 +9,6 @@ public class SpaceObject {
     protected float x;
     protected  float y;
     protected float speed;
-
     public SpaceObject(float x, float y) {
         this.x = x;
         this.y = y;

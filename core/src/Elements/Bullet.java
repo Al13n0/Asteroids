@@ -47,16 +47,14 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
      * DISTRUZIONE ASTEROIDE funzione che distrugge il proiettile quando esso
      * collide con un asteroide, la funzione richiama anche il metodo
      * incrementScore che incrementa il punteggio del giocatore quando esso
-     * distrugge un asteroide
+     * distrugge un asteroide.
      */
     public void destroy() {
-        boolean flag = false;
         for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
                 Game.get().getAsteroidi().get(i).collision(x, y);
                 delete();
-                Game.get().incrementScore(10);
-                //flag = true;
+                Game.get().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
                 break;
             }
         }
@@ -64,7 +62,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
 
     /**
      * LOGICA DEL PROGRAMMA contiene le funzioni per il movimento del
-     * proiettile,e per cancellare il proiettile quando esso esce dallo schermo
+     * proiettile,e per cancellare il proiettile quando esso esce dallo schermo.
      */
     @Override
     public void loop() {

@@ -25,9 +25,8 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      * @param y yasteroide
      * @param dimmin dimensione minima di un asteroide
      * @param vardim variazione nella dimensione dell'asteroide
-     * 
+     *
      */
-   
     public Asteroid(float x, float y, float dimmin, float vardim) {
         super(x, y);
         this.vardim = vardim;
@@ -45,11 +44,9 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      * COSTRUTTORE DEFAULT DI ASTEROIDI GRANDI
      *
      * @param x xasteroide
-     * @param y yasteroide+
-     *gli asteroidi grandi avranno una dimensione minima di 42 e una
-     * variabilita di forma di 15 
+     * @param y yasteroide+ gli asteroidi grandi avranno una dimensione minima
+     * di 42 e una variabilita di forma di 15
      */
-    
     public Asteroid(float x, float y) {
         this(x, y, 42, 15);
     }
@@ -123,11 +120,33 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
 
     public void collision(float xb, float yb) {
         esplosione.play(0.4f);
-        if (dimmin > 15) {
+        if (dimmin > 14) {
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);
         }
+        scoreSize();
         delete();
+    }
+
+    /**
+     * ASSEGNA PUNTEGGIO questa funzione calcola l'area del poligono che
+     * costituice l'asteroide e a seconda della sua dimensione restituisce i
+     * seguentei valori: asteroide grande +20 medio +50 piccolo +100 punti che
+     * andranno ad incrementare il punteggio del giocatore.
+     */
+    
+    public int scoreSize() {
+        int score = 0;
+        if (asteroid.area() > 5000) {
+            score = 20;
+        } else if (asteroid.area() > 1100) {
+            score = 80;
+        } else if (asteroid.area() > 300) {
+            score = 100;
+        }
+        System.out.println(asteroid.area());
+        System.out.println(score);
+        return score;
     }
 
     /*LOGICA ASTEROIDE*/

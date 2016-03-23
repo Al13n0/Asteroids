@@ -67,17 +67,14 @@ public class Game extends ApplicationAdapter {
         requiredscore = 10000;                //punti richiesti per vita extra
         num = 2;
 
-        fontGenerator();                        //generazione font                   
-
-        levelControll();                     //faccio la spawn degli asteroidi
+        fontGenerator();
+        levelControll();
 
     }
 
     /*FUNZIONE MAIN*/
     public void main() {
-
         render();
-
     }
 
     /*RENDERING*/
@@ -161,7 +158,7 @@ public class Game extends ApplicationAdapter {
 
     /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
     public void spawnAsteroids(int num) {
-        for (int i = 1; i <=num; i++) {
+        for (int i = 1; i <= num; i++) {
             int xasteroide = MathUtils.random(420, 800);
             int yasteroide = MathUtils.random(250, 450);
             //controllo asteroidi non nascano su Spaceship         
@@ -190,7 +187,7 @@ public class Game extends ApplicationAdapter {
 
     /*FUNZIONE CHE INCREMENTA IL LIVELLO SE NON CI SONO PIU ASTEROIDI*/
     public void incrementLevel() {
-            level++;
+        level++;
     }
 
     /*FUNZIONE CHE RITORNA LE VITE RIMASTE AL PLAYER*/
@@ -217,10 +214,15 @@ public class Game extends ApplicationAdapter {
         return score;
     }
 
-    /*FUNZIONE CHE INCREMENTA  IL PUNTEGGIO DEL GIOCATORE*/
+    /**
+     * FUNZIONE CHE INCREMENTA IL PUNTEGGIO DEL GIOCATORE
+     *
+     * @param n rappresenta di quanto incrementare il punteggio varierà a
+     * seconda della dimensione dell'asteroide.
+     */
+    
     public void incrementScore(long n) {
         score += n;
-
     }
 
     /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
@@ -258,7 +260,7 @@ public class Game extends ApplicationAdapter {
      * da creare a seconda del livello in cui è il giocatore
      */
     public void levelControll() {
-        if (asteroidi.size()==0) {
+        if (asteroidi.size() == 0) {
             incrementLevel();
             num += 2;
             if (num == 12) {
