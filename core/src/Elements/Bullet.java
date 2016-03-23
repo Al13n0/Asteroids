@@ -24,7 +24,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     /**
      * MOVIMENTO BULLET funzione che gestisce il movimento del proiettile
      * incrementanto la sua x rispetto al seno dell'angolo generato dalla
-     * rotazione dell'astronave e la sua y rispetto al coseno dell'angolo
+     * rotazione dell'astronave e la sua y rispetto al coseno dell'angolo.
      */
     public void move() {
         x += (float) sin(Math.toRadians(-rad)) * speed;
@@ -49,6 +49,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
      * incrementScore che incrementa il punteggio del giocatore quando esso
      * distrugge un asteroide.
      */
+    
     public void destroy() {
         for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {

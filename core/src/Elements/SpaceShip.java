@@ -68,7 +68,11 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
 
 
-    /*FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP*/
+    /**FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP
+     * Questa funzione gestisce il movimento dell astronave, prima di tutto richiama
+     * la funzione rotate che fa girare l'astronavave e poi verifica se il tasto
+     * up + premuto incrementa le cordinate dell'astronave.
+     */
     public void move() {
         rotate();
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) { //Accellerazione avanti//
@@ -86,6 +90,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         Spaceship.translate(y, x);
     }
 
+    
     /**
      * Funzione che ruota la nave in base all'tasto premuto dal giocatore di
      * conseguenza viene richiamata la funzione di libreria degli oggetti
@@ -101,7 +106,8 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     }
 
     /**
-     * Funzione che si occupa della fuoriuscita dalla finestra.
+     * Funzione che si occupa della fuoriuscita dalla finestra dell'player
+     * quando il giocatore esce dallo schermo riappare dalla parte opposta.
      */
     public void overScreen() {
         x = Spaceship.getX();
