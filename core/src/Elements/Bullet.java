@@ -40,7 +40,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     @Override
     public void delete() {
         super.delete();
-        Game.get().getShip().getBullets().remove(this);
+        Game.get().getGm().getShip().getBullets().remove(this);
     }
 
     /**

@@ -150,7 +150,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
                 espolisonenave.play(1.0f);
 
                 /*CONTROLLO VITE GIOCATORE*/
-                if (Game.get().lifes > 0) {
+                if (Game.get().getGm().lifes > 0) {
                     rigenerate();
                 }
             }

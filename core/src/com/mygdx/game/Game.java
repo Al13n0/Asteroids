@@ -34,9 +34,6 @@ public class Game extends ApplicationAdapter {
 
     private float width;
     private float height;
-    public int lifes;
-    public long score;
-    private long requiredscore;               //punteggio richiesto per avere un altra vita
     private int asteroidnum;
     private gameManager gm;
 
@@ -45,8 +42,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void create() {
         game = this;
-        gm = new gameManager();
-
+        asteroidnum=2;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -59,23 +55,17 @@ public class Game extends ApplicationAdapter {
         renderables = new ArrayList();
         loopables = new ArrayList();
 
-        ship = new SpaceShip(100, 100);        //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
-        /*ATTRIBUTI PARTITA E PLAYER*/
-        lifes = 3;
-        level = 0;
-        score = 0;
-        requiredscore = 5000;                //punti richiesti per vita extra
-        asteroidnum = 2;
-
+        gm = new gameManager();
         fontGenerator();
         levelControll();
-
+       
     }
 
     /*FUNZIONE MAIN*/
     public void main() {
         render();
+        gm.musicSet();
     }
 
     /*RENDERING*/
@@ -90,7 +80,7 @@ public class Game extends ApplicationAdapter {
         }
         loop();
         hud();
-
+      
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
@@ -124,14 +114,14 @@ public class Game extends ApplicationAdapter {
                 x.printStackTrace();
                 break;
             }
-            if (game.lifes <= 0) {
-                lifes = 0;
+            if (gm.getlife() <= 0) {
+                //lifes = 0;
                 drawText("GAME OVER", width / 2 - 50, height / 2);
                 //spaceMusic.stop();
             }
             gm.addLife();
             levelControll();
-            //musicSet();
+           
         }
     }
 
@@ -159,20 +149,6 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-    /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
-    public void spawnAsteroids(int num) {
-        for (int i = 1; i <= num; i++) {
-            int xasteroide = MathUtils.random(420, 800);
-            int yasteroide = MathUtils.random(250, 450);
-            //controllo asteroidi non nascano su Spaceship         
-            if (xasteroide == getShip().getVertices()[4] && yasteroide ==getShip().getVertices()[5]) {
-                xasteroide += 100;
-                yasteroide += 150;
-            }
-            new Asteroid(xasteroide, yasteroide);
-        }
-    }
-
     /*FUNZIONE CHE RITORNA ARRAYLIST DI  ASTEROIDI*/
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
@@ -191,11 +167,6 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE CHE RITORNA L'ALTEZZA DELLA FINESTRA*/
     public float getHeight() {
         return height;
-    }
-
-    /*FUNZIONE CHE RITORNA UN ASTRONAVE*/
-    public SpaceShip getShip() {
-        return ship;
     }
 
     /*FUNZIONE CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
@@ -224,7 +195,7 @@ public class Game extends ApplicationAdapter {
             if (asteroidnum == 12) {
                 asteroidnum = 12;
             }
-            spawnAsteroids(asteroidnum);
+            gm.spawnAsteroids(asteroidnum);
         }
     }
 

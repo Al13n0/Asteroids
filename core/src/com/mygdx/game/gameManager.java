@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import Elements.Asteroid;
+import Elements.SpaceShip;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,14 +16,18 @@ public class gameManager {
     private int asteroidnum;
     private int level;
     private ArrayList<Asteroid> asteroidi;       //arraylist degli asteroidi
+    private SpaceShip ship;                        //rappresenta l'asronave
 
     public gameManager() {
         lifes = 3;
         level = 0;
         score = 0;
         requiredscore = 5000;                //punti richiesti per vita extra
-        asteroidnum = 2;
+        asteroidnum = 4;
+        ship = new SpaceShip(100, 100);        //creo una nuova astronave passangoli le cordinate
+        asteroidi = new ArrayList();
         musicSet();
+
     }
 
     /**
@@ -75,10 +80,19 @@ public class gameManager {
     public long getScore() {
         return score;
     }
+
+    /*FUNZIONE PER CREARE CREARE DEGLI ASTEROIDI*/
+    public void spawnAsteroids(int num) {
+        for (int i = 1; i <= num; i++) {
+            int xasteroide = MathUtils.random(420, 800);
+            int yasteroide = MathUtils.random(250, 450);
+            new Asteroid(xasteroide, yasteroide);
+        }
+    }
+
+    /*FUNZIONE CHE RITORNA UN ASTRONAVE*/
+    public SpaceShip getShip() {
+        return ship;
+    }
+
 }
-    /**
-     * Funzione che controlla l'avanzamento di livello e il numero di asteroidi
-     * da creare a seconda del livello in cui è il giocatore.
-     */
-    
-  
