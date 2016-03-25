@@ -17,7 +17,9 @@ public class SpaceObject {
         }
         if (this instanceof Renderable) {
             Game.get().registerRenderable((Renderable) this);
+           
         }
+        
     }
     
 /*FUNZIONE PER ELIMINARE OGGETTI*/

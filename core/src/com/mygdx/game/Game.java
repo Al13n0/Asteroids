@@ -1,8 +1,6 @@
 package com.mygdx.game;
 
 import Elements.Asteroid;
-import Elements.Asteroid;
-import Elements.SpaceShip;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -40,14 +38,15 @@ public class Game extends ApplicationAdapter {
     public long score;
     private long requiredscore;               //punteggio richiesto per avere un altra vita
     private int asteroidnum;
-    private Music spaceMusic;
- 
+    private gameManager gm;
+
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
     public void create() {
         game = this;
-    
+        gm = new gameManager();
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -62,10 +61,6 @@ public class Game extends ApplicationAdapter {
 
         ship = new SpaceShip(100, 100);        //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
-
-        spaceMusic = Gdx.audio.newMusic(Gdx.files.internal("SpaceMusic.wav"));
-
-
         /*ATTRIBUTI PARTITA E PLAYER*/
         lifes = 3;
         level = 0;
@@ -81,7 +76,6 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE MAIN*/
     public void main() {
         render();
-      
     }
 
     /*RENDERING*/
@@ -94,21 +88,21 @@ public class Game extends ApplicationAdapter {
         for (Renderable r : renderables) {  // per ogni elemento dll arraylist faccio il render
             r.render(sr);
         }
-        loop();                                //loop del gioco
-        hud();                                 //disegno livello vite e punteggio in alto
+        loop();
+        hud();
 
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
     public void hud() {
         drawText("LEVEL: ", 10, 468);
-        drawText(Long.toString(getLevel()), 70, 468);
+        drawText(Long.toString(gm.getLevel()), 70, 468);
 
         drawText("LIFES: ", 370, 468);
-        drawText(Long.toString(getlife()), 435, 468);
+        drawText(Long.toString(gm.getlife()), 435, 468);
 
         drawText("SCORE: ", 650, 468);
-        drawText(Long.toString(getScore()), 715, 468);
+        drawText(Long.toString(gm.getScore()), 715, 468);
 
         drawText("©1979 ATARI INC", 330, 35);
     }
@@ -132,12 +126,12 @@ public class Game extends ApplicationAdapter {
             }
             if (game.lifes <= 0) {
                 lifes = 0;
-                Game.get().drawText("GAME OVER", width / 2 - 50, height / 2);
-                spaceMusic.stop();
+                drawText("GAME OVER", width / 2 - 50, height / 2);
+                //spaceMusic.stop();
             }
-            addLife();
+            gm.addLife();
             levelControll();
-            musicSet();
+            //musicSet();
         }
     }
 
@@ -171,7 +165,7 @@ public class Game extends ApplicationAdapter {
             int xasteroide = MathUtils.random(420, 800);
             int yasteroide = MathUtils.random(250, 450);
             //controllo asteroidi non nascano su Spaceship         
-            if (xasteroide == Game.get().ship.getVertices()[4] && yasteroide == Game.get().ship.getVertices()[5]) {
+            if (xasteroide == getShip().getVertices()[4] && yasteroide ==getShip().getVertices()[5]) {
                 xasteroide += 100;
                 yasteroide += 150;
             }
@@ -187,50 +181,6 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE STATICA CHE  RITORNA UN OGGETTO GAME*/
     public static Game get() {                        //metodo statico associato alla classe non all'istanza
         return game;
-    }
-
-    /*FUNZIONE CHE RITORNA IL LIVELLO RAGGIUNTO*/
-    public int getLevel() {
-        return level;
-    }
-
-    /*FUNZIONE CHE INCREMENTA IL LIVELLO SE NON CI SONO PIU ASTEROIDI*/
-    public void incrementLevel() {
-        level++;
-    }
-
-    /*FUNZIONE CHE RITORNA LE VITE RIMASTE AL PLAYER*/
-    public int getlife() {
-        return lifes;
-    }
-
-    /*FUNZIONE CHE ELIMINA UNA VITA AL GIOCATORE*/
-    public void loseLife() {
-        lifes--;
-    }
-
-    /*FUNZIONE CHE AGGIUNGE UNA VITA AL GIOCATORE*/
-    public void addLife() {
-        if (score > requiredscore) {
-            lifes++;
-            requiredscore += requiredscore;   //ogni 10000 assegno una vita extra
-        }
-
-    }
-
-    /*FUNZIONE CHE RITORNA IL PUNTEGGIO DEL GIOCATORE*/
-    public long getScore() {
-        return score;
-    }
-
-    /**
-     * FUNZIONE CHE INCREMENTA IL PUNTEGGIO DEL GIOCATORE
-     *
-     * @param n rappresenta di quanto incrementare il punteggio varierà a
-     * seconda della dimensione dell'asteroide.
-     */
-    public void incrementScore(long n) {
-        score += n;
     }
 
     /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
@@ -269,7 +219,7 @@ public class Game extends ApplicationAdapter {
      */
     public void levelControll() {
         if (asteroidi.isEmpty()) {
-            incrementLevel();
+            gm.incrementLevel();
             asteroidnum += 2;
             if (asteroidnum == 12) {
                 asteroidnum = 12;
@@ -279,11 +229,10 @@ public class Game extends ApplicationAdapter {
     }
 
     /**
-     * Funzione che setta il volume della musica e ne fa il play in loop.
+     * Funzione che ritorna un oggetto gameManager
      */
-    public void musicSet() {
-        spaceMusic.setVolume((float) 0.4);
-        spaceMusic.play();
+    public gameManager getGm() {
+        return gm;
     }
 
 }

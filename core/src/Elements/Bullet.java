@@ -55,7 +55,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
                 Game.get().getAsteroidi().get(i).collision(x, y);
                 delete();
-                Game.get().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
+                Game.get().getGm().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
                 break;
             }
         }
