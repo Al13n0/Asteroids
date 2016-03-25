@@ -119,7 +119,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     }
 
     public void collision(float xb, float yb) {
-        esplosione.play(0.4f);
+        esplosione.play(0.5f);
         if (dimmin > 14) {
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);

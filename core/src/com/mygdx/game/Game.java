@@ -6,6 +6,7 @@ import Elements.SpaceShip;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -38,13 +39,15 @@ public class Game extends ApplicationAdapter {
     public int lifes;
     public long score;
     private long requiredscore;               //punteggio richiesto per avere un altra vita
-    private int num;
+    private int asteroidnum;
+    private Music spaceMusic;
+ 
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
     public void create() {
         game = this;
-
+    
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -60,12 +63,15 @@ public class Game extends ApplicationAdapter {
         ship = new SpaceShip(100, 100);        //creo una nuova astronave passangoli le cordinate
         asteroidi = new ArrayList();
 
+        spaceMusic = Gdx.audio.newMusic(Gdx.files.internal("SpaceMusic.wav"));
+
+
         /*ATTRIBUTI PARTITA E PLAYER*/
         lifes = 3;
         level = 0;
         score = 0;
-        requiredscore = 10000;                //punti richiesti per vita extra
-        num = 2;
+        requiredscore = 5000;                //punti richiesti per vita extra
+        asteroidnum = 2;
 
         fontGenerator();
         levelControll();
@@ -75,6 +81,7 @@ public class Game extends ApplicationAdapter {
     /*FUNZIONE MAIN*/
     public void main() {
         render();
+      
     }
 
     /*RENDERING*/
@@ -118,7 +125,7 @@ public class Game extends ApplicationAdapter {
     public void loop() {
         for (int i = 0; i < loopables.size(); i++) {
             try {
-                loopables.get(i).loop(); //Nel loop è contenuta la logica degli oggetti
+                loopables.get(i).loop();
             } catch (Exception x) {
                 x.printStackTrace();
                 break;
@@ -126,9 +133,11 @@ public class Game extends ApplicationAdapter {
             if (game.lifes <= 0) {
                 lifes = 0;
                 Game.get().drawText("GAME OVER", width / 2 - 50, height / 2);
+                spaceMusic.stop();
             }
             addLife();
             levelControll();
+            musicSet();
         }
     }
 
@@ -220,7 +229,6 @@ public class Game extends ApplicationAdapter {
      * @param n rappresenta di quanto incrementare il punteggio varierà a
      * seconda della dimensione dell'asteroide.
      */
-    
     public void incrementScore(long n) {
         score += n;
     }
@@ -257,18 +265,25 @@ public class Game extends ApplicationAdapter {
 
     /**
      * Funzione che controlla l'avanzamento di livello e il numero di asteroidi
-     * da creare a seconda del livello in cui è il giocatore
+     * da creare a seconda del livello in cui è il giocatore.
      */
     public void levelControll() {
-        if (asteroidi.size() == 0) {
+        if (asteroidi.isEmpty()) {
             incrementLevel();
-            num += 2;
-            if (num == 12) {
-                num = 12;
+            asteroidnum += 2;
+            if (asteroidnum == 12) {
+                asteroidnum = 12;
             }
-            spawnAsteroids(num);
-            System.out.println(num);
+            spawnAsteroids(asteroidnum);
         }
+    }
+
+    /**
+     * Funzione che setta il volume della musica e ne fa il play in loop.
+     */
+    public void musicSet() {
+        spaceMusic.setVolume((float) 0.4);
+        spaceMusic.play();
     }
 
 }

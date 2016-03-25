@@ -16,16 +16,17 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
 
     private float x, y, speed;
     private final float max_speed;
-    private final Polygon Spaceship;                            //polygon contenuto nella libreria gdx
+    private final Polygon Spaceship;     //polygon contenuto nella libreria gdx
     private float[] vertices;
     private final float width;
     private final float height;
-    private int lifes;                                       //vite del giocatore
-    private long score;                                     //score del giocatore
-    private long requiredscore;                             //punteggio richiesto per avere un altra vita
-    private final ArrayList<Bullet> bullets;                //array di proiettili 
-    private static Sound sparo;                            //Sound è un interfaccia messa a disposizione dalla libreria
+    private int lifes;                                     
+    private long score;                                 
+    private long requiredscore;             //punteggio per vita  extra
+    private final ArrayList<Bullet> bullets;              
+    private static Sound sparo;              //Sound è un interfaccia messa a disposizione dalla libreria
     private static Sound espolisonenave;
+    
 
     private float dx;
     private float dy;
@@ -135,7 +136,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //iskeyjustpressed restituisce true se il tasto è appena stato premuto
             vertices = Spaceship.getTransformedVertices();
             bullets.add(new Bullet(vertices[4], vertices[5], Spaceship.getRotation()));  //i due punti che passo sono le cordinate della punta dell'astronave
-            sparo.play(1.0f); //1.0f rappresenta il volume
+            sparo.play(0.8f); //1.0f rappresenta il volume
         }
     }
 
