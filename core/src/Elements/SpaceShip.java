@@ -20,13 +20,12 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     private float[] vertices;
     private final float width;
     private final float height;
-    private int lifes;                                     
-    private long score;                                 
+    private int lifes;
+    private long score;
     private long requiredscore;             //punteggio per vita  extra
-    private final ArrayList<Bullet> bullets;              
+    private final ArrayList<Bullet> bullets;
     private static Sound sparo;              //Sound è un interfaccia messa a disposizione dalla libreria
     private static Sound espolisonenave;
-    
 
     private float dx;
     private float dy;
@@ -64,15 +63,14 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         bullets = new ArrayList<Bullet>();
         vertices = Spaceship.getTransformedVertices();
         iniSound();
-    
+
     }
 
-
-
-    /**FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP
-     * Questa funzione gestisce il movimento dell astronave, prima di tutto richiama
-     * la funzione rotate che fa girare l'astronavave e poi verifica se il tasto
-     * up + premuto incrementa le cordinate dell'astronave.
+    /**
+     * FUNZIONE PER IL MOVIMENTO DELLA SPACESHIP Questa funzione gestisce il
+     * movimento dell astronave, prima di tutto richiama la funzione rotate che
+     * fa girare l'astronavave e poi verifica se il tasto up + premuto
+     * incrementa le cordinate dell'astronave.
      */
     public void move() {
         rotate();
@@ -91,7 +89,6 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         Spaceship.translate(y, x);
     }
 
-    
     /**
      * Funzione che ruota la nave in base all'tasto premuto dal giocatore di
      * conseguenza viene richiamata la funzione di libreria degli oggetti
@@ -129,7 +126,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
     }
 
     /**
-     * Funzione per sparare.
+     * SHOOT Funzione per sparare.
      */
     public void shoot() {
         vertices = Spaceship.getTransformedVertices();
