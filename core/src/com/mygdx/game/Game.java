@@ -42,7 +42,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void create() {
         game = this;
-        asteroidnum=2;
+        asteroidnum = 2;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
@@ -55,17 +55,17 @@ public class Game extends ApplicationAdapter {
         renderables = new ArrayList();
         loopables = new ArrayList();
 
+        ship = new SpaceShip(100, 100);
         asteroidi = new ArrayList();
         gm = new gameManager();
         fontGenerator();
         levelControll();
-       
+
     }
 
-    /*FUNZIONE MAIN*/
     public void main() {
         render();
-        gm.musicSet();
+
     }
 
     /*RENDERING*/
@@ -80,7 +80,7 @@ public class Game extends ApplicationAdapter {
         }
         loop();
         hud();
-      
+
     }
 
     /*FUNZIONE CHE DISEGNA SU SCHERMO VITA LIVELLO E SCORE*/
@@ -97,15 +97,27 @@ public class Game extends ApplicationAdapter {
         drawText("©1979 ATARI INC", 330, 35);
     }
 
-    /*FUNZIONE PER DISEGNARE STRINGHE A VIDEO*/
-    public void drawText(String stringa, float width, float height) {
+    /**
+     * DRAWTEXT
+     * funzione per disegnare delle stringhe a video
+     * @param stringa stringa da disegnare
+     * @param x  cordinata x
+     * @param y cordinata y
+     */
+    
+    public void drawText(String stringa, float x, float y) {
         sb.setColor(1, 1, 1, 1);
         sb.begin();
-        font.draw(sb, stringa, width, height);
+        font.draw(sb, stringa,x,y);
         sb.end();
     }
 
-    /*LOOP DEGLI OGGETTI*/
+    /**
+     * LOOP
+     * Funzione che contiene la logica del gioco, per ogni elemento presente
+     * nell'arraylist dei loopable viene richiamato il suo metodo loop.
+     */
+    
     public void loop() {
         for (int i = 0; i < loopables.size(); i++) {
             try {
@@ -114,32 +126,44 @@ public class Game extends ApplicationAdapter {
                 x.printStackTrace();
                 break;
             }
-            if (gm.getlife() <= 0) {
-                //lifes = 0;
-                drawText("GAME OVER", width / 2 - 50, height / 2);
-                //spaceMusic.stop();
-            }
-            gm.addLife();
-            levelControll();
-           
+           Checklife();
+
         }
     }
 
-    /*FUNZIONI PER AGGIUNGERE UN OGGETTO ALL'ARRAYLIST DEI RENDERABLE*/
+    /**
+     * RegisterRenderable funzione per aggiungere un oggetto all'arraylist degli
+     * oggetti disegnabili
+     *
+     * @param r rappresenta l'oggetto da aggiungere
+     */
+    
     public void registerRenderable(Renderable r) {
         if (!renderables.contains(r)) {
             renderables.add(r);
         }
     }
 
-    /*FUNZIONI PER AGGIUNGERE UN OGGETTO ALL'ARRAYLIST DEI LOOPABLE*/
+    /**
+     * registerLoopable Funzione per aggiungere un oggetto all'arraylist degli
+     * oggetti con logica
+     *
+     * @param l rappresenta l'oggetto da aggiungere
+     */
+    
     public void registerLoopable(Loopable l) {
         if (!loopables.contains(l)) {
             loopables.add(l);
         }
     }
 
-    /*FUNZIONE CHE UTILIZZO PER RIMUOVERE GLI OGGETTI*/
+    /**
+     * DELETE funzione che utilizzo per rimuovere un oggetto dagli arraylist dei
+     * renderizzabili e dei loopabili
+     *
+     * @param o rappresenta l'oggetto da rimuovere
+     */
+    
     public void delete(Object o) {
         if (o instanceof Loopable) {
             loopables.remove((Loopable) o);
@@ -149,38 +173,68 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-    /*FUNZIONE CHE RITORNA ARRAYLIST DI  ASTEROIDI*/
+    /**
+     * GETASTEROIDI
+     *
+     * @return ritorna un arraylist contentente gli asteroidi
+     */
+    
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
     }
 
-    /*FUNZIONE STATICA CHE  RITORNA UN OGGETTO GAME*/
-    public static Game get() {                        //metodo statico associato alla classe non all'istanza
+    /**
+     * Funzione che ritorna un oggetto statico game (statico legato alla classe
+     * non alla singola istanza)
+     *
+     * @return game
+     */
+    
+    public static Game get() {
         return game;
     }
 
-    /*FUNZIONE CHE RITORNA LA LARGHEZZA DELLA FINESTRA*/
+    /**
+     * GETWIDTH
+     *
+     * @return ritorna la larghezza della finestra di gioco
+     */
+    
     public float getWidth() {
         return width;
     }
 
-    /*FUNZIONE CHE RITORNA L'ALTEZZA DELLA FINESTRA*/
+    /**
+     * GETHEIGHT
+     *
+     * @return ritorna l'altezza della finestra
+     */
+    
     public float getHeight() {
         return height;
     }
 
-    /*FUNZIONE CHE RITORNA ARRAYLIST DEGLI OGGETTI DISEGNABILI*/
+    /**
+     * Funzione che ritorna un array list contenente gli oggetti renderizzabili
+     *
+     * @return arraylist oggetti renderizzabili
+     */
+    
     public ArrayList<Renderable> getRenderable() {
         return renderables;
     }
 
-    /*FUNZIONE CHE GENERA IL FONT E I SUOI PARAMETRI*/
+    /**
+     * Funzione che setta il tipo di garattere da usare e la sua dimensione il
+     * carattere viene prelevato dalla cartella android/assets.
+     */
+    
     public void fontGenerator() {
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(
-                Gdx.files.internal("fonts/Hyperspace Bold.ttf") //sono nella cartella android/assets
+                Gdx.files.internal("fonts/Hyperspace Bold.ttf")
         );
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 17;                       //rappresenta la dimesione del font
+        parameter.size = 17;
         font = gen.generateFont(parameter);
     }
 
@@ -188,6 +242,7 @@ public class Game extends ApplicationAdapter {
      * Funzione che controlla l'avanzamento di livello e il numero di asteroidi
      * da creare a seconda del livello in cui è il giocatore.
      */
+    
     public void levelControll() {
         if (asteroidi.isEmpty()) {
             gm.incrementLevel();
@@ -195,13 +250,49 @@ public class Game extends ApplicationAdapter {
             if (asteroidnum == 12) {
                 asteroidnum = 12;
             }
-            gm.spawnAsteroids(asteroidnum);
+            spawnAsteroids(asteroidnum);
         }
     }
 
     /**
-     * Funzione che ritorna un oggetto gameManager
+     * Funzione che serve per creare gli asteroidi nel gioco
+     *
+     * @param num rappresenta il numero di asteroidi da creare
      */
+    
+    public void spawnAsteroids(int num) {
+        for (int i = 1; i <= num; i++) {
+            int xasteroide = MathUtils.random(420, 800);
+            int yasteroide = MathUtils.random(250, 450);
+            new Asteroid(xasteroide, yasteroide);
+        }
+    }
+    
+    
+    public void Checklife(){
+         if (gm.getlife() <= 0) {
+                gm.setLife(0);
+                drawText("GAME OVER", width / 2 - 50, height / 2);
+                gm.musicStop();
+            }
+            gm.addLife();
+            levelControll();
+    }
+
+    /**
+     * Funzione che ritorna una spaeship
+     *
+     * @return ship rappresenta il player.
+     */
+    
+    public SpaceShip getShip() {
+        return ship;
+    }
+
+    /**
+     * Funzione che ritorna un gameManager.
+     */
+    
     public gameManager getGm() {
         return gm;
     }
