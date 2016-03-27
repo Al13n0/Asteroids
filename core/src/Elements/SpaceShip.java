@@ -143,7 +143,7 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
             if (a.containsxy(x, y)) {
                 delete();                           //cancello astronave
-                Game.get().getGm().loseLife();              //elimino una vita al player
+                Game.get().getGm().loseLife();      //elimino una vita al player
                 espolisonenave.play(1.0f);
 
                 /*CONTROLLO VITE GIOCATORE*/

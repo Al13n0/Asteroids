@@ -4,6 +4,7 @@ import Elements.Asteroid;
 import Elements.SpaceShip;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,11 +20,9 @@ import java.util.ArrayList;
 
 public class Game extends ApplicationAdapter {
 
-    private static Game game;                    //variabile statica che assumerà stesso valore per ogni oggetto classe
-    private int level;
+    private static Game game;
     private OrthographicCamera camera;            //telecamera che renderizza oggetti
-
-    private SpaceShip ship;                        //rappresenta l'asronave
+    private SpaceShip ship;
     private ShapeRenderer sr;                    //utilizzo per renderizzare shape 
     private SpriteBatch sb;                       //utilizzo per renderizzare testo
     private BitmapFont font;                       //genera fonts da un file pngs
@@ -36,7 +35,7 @@ public class Game extends ApplicationAdapter {
     private float height;
     private int asteroidnum;
     private gameManager gm;
-
+    private boolean gameover;
 
     /*FUNZIONE DOVE INSTAZIO OGGETTI*/
     @Override
@@ -54,6 +53,7 @@ public class Game extends ApplicationAdapter {
 
         renderables = new ArrayList();
         loopables = new ArrayList();
+        gameover = false;
 
         ship = new SpaceShip(100, 100);
         asteroidi = new ArrayList();
@@ -72,7 +72,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //pulisce lo schermo 
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //pulisce lo schermo
         camera.update();
         sr.setProjectionMatrix(camera.combined);
         for (Renderable r : renderables) {  // per ogni elemento dll arraylist faccio il render
@@ -98,26 +98,23 @@ public class Game extends ApplicationAdapter {
     }
 
     /**
-     * DRAWTEXT
-     * funzione per disegnare delle stringhe a video
+     * DRAWTEXT funzione per disegnare delle stringhe a video
+     *
      * @param stringa stringa da disegnare
-     * @param x  cordinata x
+     * @param x cordinata x
      * @param y cordinata y
      */
-    
     public void drawText(String stringa, float x, float y) {
         sb.setColor(1, 1, 1, 1);
         sb.begin();
-        font.draw(sb, stringa,x,y);
+        font.draw(sb, stringa, x, y);
         sb.end();
     }
 
     /**
-     * LOOP
-     * Funzione che contiene la logica del gioco, per ogni elemento presente
-     * nell'arraylist dei loopable viene richiamato il suo metodo loop.
+     * LOOP Funzione che contiene la logica del gioco, per ogni elemento
+     * presente nell'arraylist dei loopable viene richiamato il suo metodo loop.
      */
-    
     public void loop() {
         for (int i = 0; i < loopables.size(); i++) {
             try {
@@ -126,7 +123,7 @@ public class Game extends ApplicationAdapter {
                 x.printStackTrace();
                 break;
             }
-           Checklife();
+            Checklife();
 
         }
     }
@@ -137,7 +134,6 @@ public class Game extends ApplicationAdapter {
      *
      * @param r rappresenta l'oggetto da aggiungere
      */
-    
     public void registerRenderable(Renderable r) {
         if (!renderables.contains(r)) {
             renderables.add(r);
@@ -150,7 +146,6 @@ public class Game extends ApplicationAdapter {
      *
      * @param l rappresenta l'oggetto da aggiungere
      */
-    
     public void registerLoopable(Loopable l) {
         if (!loopables.contains(l)) {
             loopables.add(l);
@@ -163,7 +158,6 @@ public class Game extends ApplicationAdapter {
      *
      * @param o rappresenta l'oggetto da rimuovere
      */
-    
     public void delete(Object o) {
         if (o instanceof Loopable) {
             loopables.remove((Loopable) o);
@@ -178,7 +172,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return ritorna un arraylist contentente gli asteroidi
      */
-    
     public ArrayList<Asteroid> getAsteroidi() {
         return asteroidi;
     }
@@ -189,7 +182,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return game
      */
-    
     public static Game get() {
         return game;
     }
@@ -199,7 +191,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return ritorna la larghezza della finestra di gioco
      */
-    
     public float getWidth() {
         return width;
     }
@@ -209,7 +200,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return ritorna l'altezza della finestra
      */
-    
     public float getHeight() {
         return height;
     }
@@ -219,7 +209,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return arraylist oggetti renderizzabili
      */
-    
     public ArrayList<Renderable> getRenderable() {
         return renderables;
     }
@@ -228,7 +217,6 @@ public class Game extends ApplicationAdapter {
      * Funzione che setta il tipo di garattere da usare e la sua dimensione il
      * carattere viene prelevato dalla cartella android/assets.
      */
-    
     public void fontGenerator() {
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(
                 Gdx.files.internal("fonts/Hyperspace Bold.ttf")
@@ -242,7 +230,6 @@ public class Game extends ApplicationAdapter {
      * Funzione che controlla l'avanzamento di livello e il numero di asteroidi
      * da creare a seconda del livello in cui è il giocatore.
      */
-    
     public void levelControll() {
         if (asteroidi.isEmpty()) {
             gm.incrementLevel();
@@ -259,7 +246,6 @@ public class Game extends ApplicationAdapter {
      *
      * @param num rappresenta il numero di asteroidi da creare
      */
-    
     public void spawnAsteroids(int num) {
         for (int i = 1; i <= num; i++) {
             int xasteroide = MathUtils.random(420, 800);
@@ -267,16 +253,29 @@ public class Game extends ApplicationAdapter {
             new Asteroid(xasteroide, yasteroide);
         }
     }
-    
-    
-    public void Checklife(){
-         if (gm.getlife() <= 0) {
-                gm.setLife(0);
-                drawText("GAME OVER", width / 2 - 50, height / 2);
-                gm.musicStop();
-            }
-            gm.addLife();
-            levelControll();
+
+    public void Checklife() {
+        if (gm.getlife() <= 0) {
+            gameover();
+        }
+        gm.addLife();
+        levelControll();
+    }
+
+    /**
+     * GAME OVER funzione che gestisce il gameover,impostando la vita a 0,
+     * fermando la musica e mandando a video la scritta playagain
+     * e qualora il giocatore premesse invio inizia una nuova partita
+     */
+    public void gameover() {
+        gameover = true;
+        gm.setLife(0);
+        gm.musicStop();
+        drawText("GAME OVER", width / 2 - 50, height / 2);
+        drawText("PRESS ENTER TO PLAY AGAIN", 270, height / 2 - 35);
+          if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+              create();
+          }     
     }
 
     /**
@@ -284,7 +283,6 @@ public class Game extends ApplicationAdapter {
      *
      * @return ship rappresenta il player.
      */
-    
     public SpaceShip getShip() {
         return ship;
     }
@@ -292,7 +290,6 @@ public class Game extends ApplicationAdapter {
     /**
      * Funzione che ritorna un gameManager.
      */
-    
     public gameManager getGm() {
         return gm;
     }

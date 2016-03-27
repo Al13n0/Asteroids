@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import interfaces.Loopable;
 import interfaces.Renderable;
+import java.util.Collection;
 
 public class Asteroid extends SpaceObject implements Loopable, Renderable {
 
@@ -170,6 +171,10 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
     public void delete() {
         super.delete();
         Game.get().getAsteroidi().remove(this);
+    }
+    public void deleteeAll(){
+        super.delete();
+        Game.get().getAsteroidi().removeAll((Collection<?>) asteroid);
     }
 
 }
