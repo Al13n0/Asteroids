@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.Game;
 
 import Elements.Asteroid;
 import Elements.SpaceShip;
@@ -79,6 +79,11 @@ public class Game extends ApplicationAdapter {
             r.render(sr);
         }
         loop();
+        if (gameover==true) {
+            drawText("GAME OVER", width / 2 - 50, height / 2);
+            drawText("PRESS ENTER TO PLAY AGAIN", 270, height / 2 - 35);
+            System.out.println(asteroidi);
+        }
         hud();
 
     }
@@ -264,18 +269,16 @@ public class Game extends ApplicationAdapter {
 
     /**
      * GAME OVER funzione che gestisce il gameover,impostando la vita a 0,
-     * fermando la musica e mandando a video la scritta playagain
-     * e qualora il giocatore premesse invio inizia una nuova partita
+     * fermando la musica e mandando a video la scritta playagain e qualora il
+     * giocatore premesse invio inizia una nuova partita
      */
     public void gameover() {
         gameover = true;
         gm.setLife(0);
         gm.musicStop();
-        drawText("GAME OVER", width / 2 - 50, height / 2);
-        drawText("PRESS ENTER TO PLAY AGAIN", 270, height / 2 - 35);
-          if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-              create();
-          }     
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            create();
+        }
     }
 
     /**

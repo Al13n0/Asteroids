@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.game.Game;
+import com.mygdx.Game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -172,9 +172,5 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         super.delete();
         Game.get().getAsteroidi().remove(this);
     }
-    public void deleteeAll(){
-        super.delete();
-        Game.get().getAsteroidi().removeAll((Collection<?>) asteroid);
-    }
-
+ 
 }

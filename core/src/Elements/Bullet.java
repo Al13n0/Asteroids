@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.game.Game;
+import com.mygdx.Game.Game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import interfaces.Loopable;

@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.game.Game;
+import com.mygdx.Game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;

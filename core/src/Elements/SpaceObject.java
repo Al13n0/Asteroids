@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.game.Game;
+import com.mygdx.Game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 
