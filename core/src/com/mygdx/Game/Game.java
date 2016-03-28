@@ -252,14 +252,14 @@ public class Game extends ApplicationAdapter {
      */
     public void spawnAsteroids(int num) {
         for (int i = 1; i <= num; i++) {
-            int xasteroide = (int) (MathUtils.random(420, 800)*0.5);
-            int yasteroide = (int) (MathUtils.random(250, 450)*0.9);
+            int xasteroide = (int) (MathUtils.random(200, 800));
+            int yasteroide = (int) (MathUtils.random(0, 400));
             new Asteroid(xasteroide, yasteroide);
         }
     }
 
     public void Checklife() {
-        if (gm.getlife() <= 0) {
+        if (gm.getlife() <= 0 ||Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) ) {
             gameover();
         }
         gm.addLife();
@@ -274,6 +274,7 @@ public class Game extends ApplicationAdapter {
     public void gameover() {
         gameover = true;
         gm.setLife(0);
+         ship.delete();
         gm.musicStop();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             create();
