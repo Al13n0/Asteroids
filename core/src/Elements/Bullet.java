@@ -53,7 +53,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
     public void destroy() {
         for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
-                Game.get().getAsteroidi().get(i).collision(x, y);
+                Game.get().getAsteroidi().get(i).splitAsteroid(x, y);
                 delete();
                 Game.get().getGm().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
                 break;

@@ -82,7 +82,6 @@ public class Game extends ApplicationAdapter {
         if (gameover==true) {
             drawText("GAME OVER", width / 2 - 50, height / 2);
             drawText("PRESS ENTER TO PLAY AGAIN", 270, height / 2 - 35);
-            System.out.println(asteroidi);
         }
         hud();
 
@@ -253,8 +252,8 @@ public class Game extends ApplicationAdapter {
      */
     public void spawnAsteroids(int num) {
         for (int i = 1; i <= num; i++) {
-            int xasteroide = MathUtils.random(420, 800);
-            int yasteroide = MathUtils.random(250, 450);
+            int xasteroide = (int) (MathUtils.random(420, 800)*0.5);
+            int yasteroide = (int) (MathUtils.random(250, 450)*0.9);
             new Asteroid(xasteroide, yasteroide);
         }
     }
