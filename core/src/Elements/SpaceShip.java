@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.Game.Game;
+import Game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -37,7 +37,8 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
      * Crea una nave alle coordinate date
      *
      * @param x coordinata x
-     * @param y coordinate y la nave è costituita da un poligono i cui vertici
+     * @param y coordinate y 
+     * la nave è costituita da un poligono i cui vertici
      * vengono inizializzati in questa funzione tenendo conto dell'altezza e
      * della larghezza della finestra.
      *
@@ -137,7 +138,9 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
     }
 
-    /* FUNZIONE CHE DISTRUGGE ASTRONAVE  QUANDO COLLIDE CON ASTEROIDE*/
+    /**CHECKDESTRUCTION
+     * Funzione che distrugge un astronave quando collide con un asteroide
+     */
     public void checkDestruction() {
         float x = vertices[4], y = vertices[5];
         for (Asteroid a : Game.get().getAsteroidi()) {  // per ogni asteroide chiamo expolison e verifico se contiene le cordinate del proiettile
@@ -154,22 +157,27 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         }
     }
 
-    /*FUNZIONE CHE RITORNA L' ARRAYLIST DEI PROIETTILI*/
+    /**
+     * GETBULLETS
+     * @return ritorna l'array list dei proiettili
+     */
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
 
-    /*FUNZIONE PER RIGENERARE ASTRONAVE DOPO ESSERE STATA DISTRUTTA*/
+    /**RIGENERATE
+     * funzione che rigenera l'astronave dopo essere stata distrutta
+     */
     public void rigenerate() {
         new SpaceShip(100, 100);
     }
 
-    /*FUNZIONE CONTENENTE LA LOGICA DEL GIOCO*/
+    /*FUNZIONE CONTENENTE LA LOGICA DELL'ASTRONAVE*/
     @Override
     public void loop() {
-        move();              //movimento astronave
-        overScreen();    //controlla che astronvave non esce schermo
-        shoot();             //sparare
+        move();                           //movimento astronave
+        overScreen();               //controlla che astronvave non esce schermo
+        shoot();                  
         checkDestruction();
     }
 

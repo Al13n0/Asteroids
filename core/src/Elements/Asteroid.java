@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.Game.Game;
+import Game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -92,6 +92,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         float[] punti = new float[npunti * 2];   //per due perchè contiene x e y
         float a = (float) (Math.random() * Math.PI * 2);
         for (int i = 0; i < npunti * 2; i += 2) {
+            
             float r = (float) (Math.random() * vardim + dimmin); //raggio circonferenza
             float spost = (float) (Math.random() * Math.PI * 2 / (npunti * 10));  //serve per non avere asteroidi troppo circolari
             a += (float) (Math.PI * 2 / npunti) + spost - Math.PI * 2 / (npunti * 10 * 2);
@@ -105,21 +106,22 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      * MOVIMENTO ASTEROIDE Funzione che richiama rotate che gestisce la
      * rotazione dell'asteroide e incrementa la x e la y per il seno e il coseno
      * dell'orbita che è un numero casuale assegnato all'asteroide quando viene
-     * istanziato inoltre se gli asteroidi sono  molto piccoli incremento la loro velocita.
-     * 
+     * istanziato inoltre se gli asteroidi sono molto piccoli incremento la loro
+     * velocita.
+     *
      */
     public void move() {
         rotate();
         x = (float) Math.cos(orbita);
         y = (float) Math.sin(orbita);
-        
-        if (asteroid.area() <=1255) {
-            x = (float) ((float) Math.cos(orbita) +0.3);
-            y = (float) ((float) Math.sin(orbita) +0.3);
+
+        if (asteroid.area() <= 1255) {
+            x = (float) ((float) Math.cos(orbita) + 0.3);
+            y = (float) ((float) Math.sin(orbita) + 0.3);
         }
-         if (asteroid.area() <=315) {
-            x = (float) ((float) Math.cos(orbita) +0.56);
-            y = (float) ((float) Math.sin(orbita) +0.56);
+        if (asteroid.area() <= 315) {
+            x = (float) ((float) Math.cos(orbita) + 0.60);
+            y = (float) ((float) Math.sin(orbita) + 0.60);
         }
 
     }
@@ -177,6 +179,8 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      * costituice l'asteroide e a seconda della sua dimensione restituisce i
      * seguentei valori: asteroide grande +20 medio +50 piccolo +100 punti che
      * andranno ad incrementare il punteggio del giocatore.
+     *
+     * @return punteggio ritornato
      */
     public int scoreSize() {
         int score = 0;
@@ -187,8 +191,6 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
         } else if (asteroid.area() < 500) {
             score = 100;
         }
-        System.out.println(asteroid.area());
-
         return score;
     }
 

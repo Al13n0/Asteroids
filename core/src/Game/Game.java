@@ -1,4 +1,4 @@
-package com.mygdx.Game;
+package Game;
 
 import Elements.Asteroid;
 import Elements.SpaceShip;

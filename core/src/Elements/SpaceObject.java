@@ -1,6 +1,6 @@
 package Elements;
 
-import com.mygdx.Game.Game;
+import Game.Game;
 import interfaces.Loopable;
 import interfaces.Renderable;
 
@@ -22,8 +22,11 @@ public class SpaceObject {
         
     }
     
-/*FUNZIONE PER ELIMINARE OGGETTI*/
-    
+/**
+ * DELETE 
+ * richiama il metodo delete di game
+ */
+  
     public void delete(){
         Game.get().delete(this);
     }
