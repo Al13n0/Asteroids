@@ -164,7 +164,7 @@ public class Asteroid extends SpaceObject implements Loopable, Renderable {
      */
     public void splitAsteroid(float xb, float yb) {
         esplosione.play(0.5f);
-        if (dimmin > 14) {
+        if (dimmin > 15) {
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);
             new Asteroid(xb, yb, dimmin / 2, vardim / 2);
         }

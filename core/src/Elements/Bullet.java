@@ -32,7 +32,6 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
 
     }
 
-    /*CONTROLLO USCITA SCHERMO*/
     public boolean overscreen() {
         return x > Game.get().getWidth() || x < 0 || y > Game.get().getHeight() || y < 0;
     }
@@ -50,12 +49,12 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
      * distrugge un asteroide.
      */
     
-    public void destroy() {
+    public void checkDestroy() {
         for (int i = 0; i < Game.get().getAsteroidi().size(); i++) {
             if (Game.get().getAsteroidi().get(i).containsxy(x, y)) {
+                Game.get().getGm().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
                 Game.get().getAsteroidi().get(i).splitAsteroid(x, y);
                 delete();
-                Game.get().getGm().incrementScore(Game.get().getAsteroidi().get(i).scoreSize());
                 break;
             }
         }
@@ -71,7 +70,7 @@ public class Bullet extends SpaceObject implements Renderable, Loopable {
         if (overscreen()) {
             delete();
         }
-        destroy();
+        checkDestroy();
     }
 
     /**

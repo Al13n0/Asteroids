@@ -60,6 +60,7 @@ public class Game extends ApplicationAdapter {
         gm = new gameManager();
         fontGenerator();
         levelControll();
+     
 
     }
 
@@ -82,6 +83,7 @@ public class Game extends ApplicationAdapter {
         if (gameover==true) {
             drawText("GAME OVER", width / 2 - 50, height / 2);
             drawText("PRESS ENTER TO PLAY AGAIN", 270, height / 2 - 35);
+            //System.exit(0);
         }
         hud();
 
@@ -252,8 +254,10 @@ public class Game extends ApplicationAdapter {
      */
     public void spawnAsteroids(int num) {
         for (int i = 1; i <= num; i++) {
-            int xasteroide = (int) (MathUtils.random(200, 800));
-            int yasteroide = (int) (MathUtils.random(0, 400));
+            float angolo= MathUtils.random(200, 800);
+            float raggio=height/2;
+            int xasteroide = Math.round(MathUtils.cos(angolo)*raggio);
+            int yasteroide = Math.round(MathUtils.sin(angolo)*raggio);
             new Asteroid(xasteroide, yasteroide);
         }
     }
@@ -278,6 +282,9 @@ public class Game extends ApplicationAdapter {
         gm.musicStop();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             create();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DEL)) {
+            System.exit(0);
         }
     }
 

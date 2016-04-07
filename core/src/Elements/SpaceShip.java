@@ -180,9 +180,6 @@ public class SpaceShip extends SpaceObject implements Renderable, Loopable {
         sr.setColor(1, 1, 1, 1);
         sr.polygon(Spaceship.getTransformedVertices());
         sr.end();
-        for (Bullet b : bullets) {
-            b.render(sr); //per ogni proiettile b contenuto in bullets chiamo il metodo b.render
-        }
     }
 
     public float[] getVertices() {
