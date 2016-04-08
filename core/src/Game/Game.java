@@ -100,7 +100,7 @@ public class Game extends ApplicationAdapter {
         drawText("SCORE: ", 650, 468);
         drawText(Long.toString(gm.getScore()), 715, 468);
 
-        drawText("©1979 ATARI INC", 330, 35);
+        drawText("©1996 CESARI INC", 330, 35);
     }
 
     /**
